@@ -1,0 +1,10 @@
+{
+    "health":5000,
+    "itemCapacity":6000
+    "requirements":[
+        "thorium/6000",
+        "silicon/6000",
+        "titanium/5000",
+        "铀/5000",
+    ]
+}
