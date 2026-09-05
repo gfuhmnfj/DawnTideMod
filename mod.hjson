@@ -1,0 +1,8 @@
+displayName: "曙光潮涌0.3.7"
+name: "dawnTide"
+author: "爱摸鱼的奈奈，天苑四"
+main: "dawnTideMod.dawnTide"
+description: "感谢以下这些开发室成员\n画师：天苑四\n\n作者：爱摸鱼的奈奈"
+version: 0.3.7
+minGameVersion: 159.1
+java: true

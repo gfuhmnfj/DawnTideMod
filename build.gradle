@@ -1,0 +1,96 @@
+apply plugin: "java"
+
+sourceSets.main.java.srcDirs = ["src"]
+
+ext{
+    mindustryVersion = "v159.7"
+    isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
+    sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+    intermediatesLibs = "build/intermediates/libs"
+}
+
+repositories{
+    mavenCentral()
+
+    ivy{
+        url = 'https://github.com/'
+        patternLayout{ artifact(
+            (mindustryVersion == "latest" ? '/[organisation]/[module]/releases/[revision]/download/dependencies.jar' :
+            mindustryVersion == "be" ? '/[organisation]/[module]/releases/download/master/[revision].jar' :
+            '/[organisation]/[module]/releases/download/[revision]/dependencies.jar'))
+        }
+        metadataSources{ artifact() }
+
+        content{
+            if(mindustryVersion == "be"){
+                includeVersion("Anuken", "MindustryBuilds", "latest")
+            }else{
+                includeVersion("Anuken", "Mindustry", mindustryVersion)
+            }
+        }
+    }
+}
+
+java{
+    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies{
+    compileOnly mindustryVersion == "be" ? "Anuken:MindustryBuilds:latest" : "Anuken:Mindustry:$mindustryVersion"
+}
+
+jar{
+    archiveFileName = "${project.name}Desktop.jar"
+    destinationDirectory = file(intermediatesLibs)
+
+    from{
+        configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from(projectDir){
+        include "mod.hjson"
+    }
+
+    from("assets/"){
+        include "**"
+    }
+}
+
+tasks.register('jarAndroid'){
+    dependsOn "jar"
+    def projectName = project.name
+
+    doLast{
+        if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.")
+
+        def d8Dir = new File("$sdkRoot/build-tools/").listFiles().sort().reverse().find{ f -> new File(f, "lib/d8.jar").exists() }
+        if(!d8Dir) throw new GradleException("No d8.jar found in $sdkRoot/build-tools")
+
+        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists() }
+        if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
+
+        def javaBin = new File(System.getProperty("java.home"), "bin/java" + (isWindows ? ".exe" : ""))
+
+        def cmd = [javaBin.path, "-cp", new File(d8Dir, "lib/d8.jar").path, "com.android.tools.r8.D8",
+                   "--min-api", "21",
+                   "--classpath", new File(platformRoot, "android.jar").path,
+                   "--output", "${projectName}Android.jar",
+                   "${projectName}Desktop.jar"]
+
+        def working = new File(intermediatesLibs)
+        def proc = cmd.execute(null, working)
+        proc.waitForProcessOutput(System.out, System.err)
+        if(proc.exitValue() != 0) throw new GradleException("d8 failed with exit code ${proc.exitValue()}")
+    }
+}
+
+tasks.register('deploy', Jar){
+    def projectName = project.name
+    dependsOn jarAndroid
+    dependsOn jar
+    archiveFileName = "${projectName}0.3.7.jar"//这里
+    destinationDirectory = file("build/libs")
+
+    from{ [zipTree("${intermediatesLibs}/${projectName}Desktop.jar"), zipTree("${intermediatesLibs}/${projectName}Android.jar")] }
+}
