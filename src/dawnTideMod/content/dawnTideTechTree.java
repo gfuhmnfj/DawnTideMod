@@ -1,36 +1,56 @@
 package dawnTideMod.content;
 
 import arc.struct.Seq;
-import mindustry.content.Blocks;
-import mindustry.content.Items;
-import mindustry.content.SectorPresets;
-import mindustry.content.TechTree;
+import mindustry.content.*;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 import mindustry.type.SectorPreset;
+import static mindustry.content.SectorPresets.planetaryTerminal;
+
 
 public class dawnTideTechTree {
     private static TechTree.TechNode context = null;
-
-    public static Seq<TechTree.TechNode> all = new Seq<>();
     public static Seq<TechTree.TechNode> roots = new Seq<>();
     public static void load(){
-        addToNext(Blocks.graphitePress,() ->{
-        node(dawnTideBlocks.BariteFurnace,Seq.with(new Objectives.Objective[]{new Objectives.SectorComplete(SectorPresets.planetaryTerminal)}),() ->{
-            node(dawnTideBlocks.CrystalSynthesizer, Seq.with(new Objectives.Research(dawnTideItems.HighExplosive)), () -> {});
-            });
+        // 物品，液体，辅助，电力，单位工厂，墙
+
+        // 工厂
+        addToNext(Blocks.multiplicativeReconstructor,() -> {
+            node(dawnTideBlocks.NumberUpgradeUnitGenerator, Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {});
+        });
+        addToNext(Blocks.router,() ->{
+            nodeProduce(dawnTideBlocks.miniWarehouse,() ->{});
         });
 
-        addToNext(Items.copper,() ->{
+
+        //物品
+        addToNext(Items.titanium,() ->{
             nodeProduce(dawnTideItems.Iron,() ->{
-                nodeProduce(dawnTideItems.Barite,() ->{
-                    nodeProduce(dawnTideItems.HighExplosive,() ->{
-
-                    });
-                });
+                nodeProduce(dawnTideItems.Quartz,() ->{});
+            });
+            nodeProduce(dawnTideItems.CeramicGlass,() ->{});
+            nodeProduce(dawnTideItems.fibrousFat,() ->{});
+        });
+        addToNext(Items.thorium,() ->{
+            nodeProduce(dawnTideItems.Steel,() ->{
+                nodeProduce(dawnTideItems.Uranium,() ->{});
             });
         });
+        addToNext(Items.surgeAlloy,() ->{
+            nodeProduce(dawnTideItems.BoundaryBreakingAlloy,() ->{});
+        });
+        addToNext(Items.blastCompound,() ->{
+            nodeProduce(dawnTideItems.HighExplosive,() ->{});
+        });
+
+        //液体
+        addToNext(Liquids.water,() ->{
+            nodeProduce(dawnTideLiquids.vulcanizing,() ->{});
+        });
+
+        //墙
+
     }
 
     public static void addToNext(UnlockableContent content,Runnable run){

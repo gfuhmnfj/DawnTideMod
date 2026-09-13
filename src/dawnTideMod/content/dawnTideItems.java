@@ -41,7 +41,7 @@ public class dawnTideItems {
             alwaysUnlocked = false;
         }};
 
-        BoundaryBreakingAlloy = new Item("Boundary_Breaking_Alloy", Color.valueOf("E4E3C8FF")){{//临界合金
+        BoundaryBreakingAlloy = new Item("BoundaryBreakingAlloy", Color.valueOf("E4E3C8FF")){{//临界合金
             cost = 0.5f;
             alwaysUnlocked = false;
             healthScaling = 0.6f;
@@ -71,7 +71,7 @@ public class dawnTideItems {
             cost = 0.5f;
             alwaysUnlocked = false;
             radioactivity = 1.5f; //放射性
-            healthScaling = 1.2f;
+            healthScaling = 2f;
         }};
     }
 }
