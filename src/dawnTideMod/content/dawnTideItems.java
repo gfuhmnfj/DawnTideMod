@@ -3,10 +3,15 @@ package dawnTideMod.content;
 import arc.graphics.Color;
 import mindustry.type.Item;
 
+/**
+ * dawnTideItems 类用于定义游戏中的各种物品及其属性
+ * 该类包含多个静态Item对象，每种物品都有其特定的属性，如硬度、成本、解锁状态等
+ */
 public class dawnTideItems {
+    // 声明多种静态Item对象，用于存储游戏中的各种物品
     public static Item
-            Quartz,Iron,Uranium,Steel,CeramicGlass,BoundaryBreakingAlloy,
-            Barite,HighExplosive,OreCrystallization,fibrousFat;
+            Quartz,Iron,Uranium,Steel,CeramicGlass,BoundaryBreakingAlloy,Barite,HighExplosive,OreCrystallization,
+            fibrousFat,fluxAlloy,BlueCrystal,TitaniumSilver,RefinedTitaniumSilver;
 
     public static void load(){
         Quartz = new Item("Quartz", Color.valueOf("F4F4F4FF")){{//石英
@@ -47,7 +52,8 @@ public class dawnTideItems {
             healthScaling = 0.6f;
         }};
 
-        Barite = new Item("Barite", Color.valueOf("A8E1E6FF")){{//重晶石
+
+            Barite = new Item("Barite", Color.valueOf("A8E1E6FF")){{//重晶石
             hardness = 5;
             cost = 0.5f;
             alwaysUnlocked = false;
@@ -73,5 +79,29 @@ public class dawnTideItems {
             radioactivity = 1.5f; //放射性
             healthScaling = 2f;
         }};
+
+        fluxAlloy = new Item("fluxAlloy", Color.valueOf("FFFFFFFF")){{//通量合金
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 2f;
+        }};
+
+        BlueCrystal = new Item("BlueCrystal", Color.valueOf("FFFFFFFF")){{//蓝晶
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 2f;
+        }};
+
+        TitaniumSilver = new Item("TitaniumSilver", Color.valueOf("FFFFFFFF")){{//钛银
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 2f;
+        }};
+
+        RefinedTitaniumSilver = new Item("RefinedTitaniumSilver", Color.valueOf("FFFFFFFF")){{//精炼钛银
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 2f;
+            }};
     }
 }

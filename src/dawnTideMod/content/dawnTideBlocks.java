@@ -30,9 +30,10 @@ public class dawnTideBlocks {
     public static Block
             //工厂
     ExplosivesFactory,BariteFurnace,ThermonuclearFurnace,SulfideElectrolysisCell,SlagCooler,
-    CrystalSynthesizer,CompositeSiliconPlant,ForgingFurnace,GlazeKiln,
+    CrystalSynthesizer,CompositeSiliconPlant,ForgingFurnace,GlazeKiln,TitaniumSilverMeltingFurnace,
+    BlueCrystalCompressor,fluxReactor,
             //矿物
-    QuartzOre,IronOre,UraniumOre,
+    QuartzOre,IronOre,UraniumOre,TitaniumSilverOre,OreCrystallizationOre,BariteOre,
             //墙
     SiliconWall,SiliconWallLarge,GiantSiliconWall,ChemicalDefenseWall,ChemicalDefenseWallLarge,
     GiantCopperWall,GiantTitaniumWall,GiantThoriumWall,CrystalWall, CrystalWallLarge,
@@ -43,6 +44,8 @@ public class dawnTideBlocks {
     BlockSpotlight,miniWarehouse,BlockRepairer,
     //运输
     QuartzConveyor,QuartzBridge,
+    //液体运输
+
     //钻头
     MagnetoExplosionDrill,MagneticEnergyDrill,CrystalDrill,
     //单位工厂
@@ -194,6 +197,54 @@ public class dawnTideBlocks {
             itemCapacity = 20;
         }};
 
+        TitaniumSilverMeltingFurnace = new GenericCrafter("TitaniumSilverMeltingFurnace"){{//钛银熔炉
+            requirements(Category.crafting, ItemStack.with(dawnTideItems.Quartz,90,dawnTideItems.CeramicGlass,80,Items.silicon,90,dawnTideItems.OreCrystallization,50,Items.plastanium,85));
+            alwaysUnlocked = false;
+            craftEffect = Fx.pulverizeMedium;
+            outputItem = new ItemStack(dawnTideItems.TitaniumSilver,2);
+            consumeItems(with(dawnTideItems.TitaniumSilver,1,Items.graphite,2));
+            consumePower(5f);
+            hasPower = true;
+            health = 550;
+            size = 3;
+            hasItems = true;
+            craftTime = 99f;
+            buildTime = 270f;
+            itemCapacity = 10;
+        }};
+
+        BlueCrystalCompressor = new GenericCrafter("BlueCrystalCompressor"){{//蓝晶压缩机
+            requirements(Category.crafting, ItemStack.with(dawnTideItems.Quartz,90,dawnTideItems.CeramicGlass,80,Items.silicon,90,dawnTideItems.OreCrystallization,50,Items.plastanium,85));
+            alwaysUnlocked = false;
+            craftEffect = Fx.pulverizeMedium;
+            outputItem = new ItemStack(dawnTideItems.BlueCrystal,1);
+            consumeItems(with(dawnTideItems.Barite,1,Items.graphite,2));
+            consumePower(5f);
+            hasPower = true;
+            health = 650;
+            size = 2;
+            hasItems = true;
+            craftTime = 55f;
+            buildTime = 87f;
+            itemCapacity = 10;
+        }};
+
+        fluxReactor = new GenericCrafter("fluxReactor"){{//通量反应炉
+            requirements(Category.crafting, ItemStack.with(dawnTideItems.Quartz,90,dawnTideItems.CeramicGlass,80,Items.silicon,90,dawnTideItems.OreCrystallization,50,Items.plastanium,85));
+            alwaysUnlocked = false;
+            craftEffect = Fx.pulverizeMedium;
+            outputItem = new ItemStack(dawnTideItems.TitaniumSilver,2);
+            consumeItems(with(dawnTideItems.TitaniumSilver,1,Items.graphite,2));
+            consumePower(5f);
+            hasPower = true;
+            health = 550;
+            size = 3;
+            hasItems = true;
+            craftTime = 99f;
+            buildTime = 270f;
+            itemCapacity = 10;
+        }};
+
 
 
 
@@ -222,6 +273,26 @@ public class dawnTideBlocks {
             oreScale = 23.47619f;
         }};
 
+        TitaniumSilverOre = new OreBlock(dawnTideItems.TitaniumSilver){{
+            oreDefault = true;
+            oreThreshold = 0.81f;
+            oreScale = 23.47619f;
+        }};
+
+        OreCrystallizationOre = new OreBlock(dawnTideItems.OreCrystallization){{
+            oreDefault = true;
+            oreThreshold = 0.81f;
+            oreScale = 23.47619f;
+        }};
+
+        BariteOre = new OreBlock(dawnTideItems.Barite){{
+            oreDefault = true;
+            oreThreshold = 0.81f;
+            oreScale = 23.47619f;
+        }};
+
+
+
 
 
 
@@ -248,6 +319,7 @@ public class dawnTideBlocks {
             insulated = true;
             absorbLasers = true;
             schematicPriority = 10;
+            armor = 5;
         }};
 
         ChemicalDefenseWall = new Wall("ChemicalDefenseWall"){{//防化墙
@@ -273,16 +345,19 @@ public class dawnTideBlocks {
         GiantCopperWall = new Wall("GiantCopperWall"){{//巨型铜墙
             requirements(Category.defense, with(Items.copper,54));
             health = 1999;
+            armor = 2;
         }};
 
         GiantTitaniumWall = new Wall("GiantTitaniumWall"){{//巨型钛墙
             requirements(Category.defense, with(Items.titanium,54));
             health = 2600;
+            armor = 3;
         }};
 
         GiantThoriumWall = new Wall("GiantThoriumWall"){{//巨型钍墙
             requirements(Category.defense, with(Items.thorium,54));
             health = 4555;
+            armor = 4;
         }};
 
         CrystalWall = new Wall("CrystalWall"){{//碎晶墙
