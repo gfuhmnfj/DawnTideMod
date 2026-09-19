@@ -37,7 +37,7 @@ public class dawnTideTechTree {
                 nodeProduce(dawnTideItems.Uranium,() ->{});
             });
         });
-        addToNext(Items.surgeAlloy,() ->{
+        addToNext(dawnTideItems.Uranium,() ->{
             nodeProduce(dawnTideItems.BoundaryBreakingAlloy,() ->{});
         });
         addToNext(Items.blastCompound,() ->{

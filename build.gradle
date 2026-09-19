@@ -32,8 +32,8 @@ repositories{
 }
 
 java{
-    targetCompatibility = JavaVersion.VERSION_11
-    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_16
 }
 
 dependencies{
@@ -89,7 +89,7 @@ tasks.register('deploy', Jar){
     def projectName = project.name
     dependsOn jarAndroid
     dependsOn jar
-    archiveFileName = "${projectName}0.3.7.jar"//这里
+    archiveFileName = "${projectName}.jar"
     destinationDirectory = file("build/libs")
 
     from{ [zipTree("${intermediatesLibs}/${projectName}Desktop.jar"), zipTree("${intermediatesLibs}/${projectName}Android.jar")] }
