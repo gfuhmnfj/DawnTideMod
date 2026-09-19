@@ -49,6 +49,11 @@ public class dawnTideTechTree {
             nodeProduce(dawnTideLiquids.vulcanizing,() ->{});
         });
 
+        //星球与区块
+        addToNext(Planets.erekir,() ->{
+            node(dawnTidePlanets.dawnSector,() ->{});
+        });
+
         //墙
 
     }

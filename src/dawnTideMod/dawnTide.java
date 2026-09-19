@@ -6,19 +6,30 @@ import arc.scene.event.Touchable;
 import arc.scene.ui.Label;
 import arc.scene.ui.layout.Table;
 import dawnTideMod.content.*;
+import dawnTideMod.multicrafter.MultiCrafterBlock;
+import dawnTideMod.multicrafter.type.DrawRecipe;
+import dawnTideMod.multicrafter.world.AttributeMultiCrafterBlock;
 import mindustry.Vars;
+import mindustry.mod.ClassMap;
 import mindustry.mod.*;
 
 
 public class dawnTide extends Mod {
-    public dawnTide(){}
+    public dawnTide(){
+        // 注册 JSON 反序列化的类名映射，使 hjson 中 type: MultiCrafter / AttributeMultiCrafter / DrawRecipe 可用
+        ClassMap.classes.put("MultiCrafter", MultiCrafterBlock.class);
+        ClassMap.classes.put("AttributeMultiCrafter", AttributeMultiCrafterBlock.class);
+        ClassMap.classes.put("DrawRecipe", DrawRecipe.class);
+    }
 
     @Override
     public void loadContent(){
+        // 依赖顺序：items/liquids 先于 blocks（blocks 里 consumeLiquid 引用自定义液体）
         dawnTideItems.load();
+        dawnTideLiquids.load();
         dawnTideBlocks.load();
         super.loadContent();
-        dawnTideLiquids.load();
+        dawnTidePlanets.load();
         dawnTideTechTree.load();
         dawnTideStatuses.load();
         dawnBullets.load();

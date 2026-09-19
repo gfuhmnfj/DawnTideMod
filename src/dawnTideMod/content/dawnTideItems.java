@@ -2,13 +2,7 @@ package dawnTideMod.content;
 
 import arc.graphics.Color;
 import mindustry.type.Item;
-
-/**
- * dawnTideItems 类用于定义游戏中的各种物品及其属性
- * 该类包含多个静态Item对象，每种物品都有其特定的属性，如硬度、成本、解锁状态等
- */
 public class dawnTideItems {
-    // 声明多种静态Item对象，用于存储游戏中的各种物品
     public static Item
             Quartz,Iron,Uranium,Steel,CeramicGlass,BoundaryBreakingAlloy,Barite,HighExplosive,OreCrystallization,
             fibrousFat,fluxAlloy,BlueCrystal,TitaniumSilver,RefinedTitaniumSilver;

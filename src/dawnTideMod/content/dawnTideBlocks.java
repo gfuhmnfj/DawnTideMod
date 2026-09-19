@@ -14,13 +14,17 @@ import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.distribution.BufferedItemBridge;
 import mindustry.world.blocks.distribution.Conveyor;
+import mindustry.world.blocks.distribution.MassDriver;
+import mindustry.world.blocks.distribution.StackConveyor;
 import mindustry.world.blocks.environment.OreBlock;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.Drill;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.blocks.storage.StorageBlock;
+import mindustry.world.blocks.storage.Unloader;
 import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.draw.*;
+import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.BuildVisibility;
 import static mindustry.type.ItemStack.with;
 import static mindustry.world.meta.Attribute.water;
@@ -39,14 +43,14 @@ public class dawnTideBlocks {
     GiantCopperWall,GiantTitaniumWall,GiantThoriumWall,CrystalWall, CrystalWallLarge,
     ErosionResistantWall,ErosionResistantWallLarge,
     //电力
-    tidalPowerGenerator,QuartzBattery,QuartzPowerNode,criticalReactor,
+    tidalPowerGenerator,QuartzBattery,QuartzPowerNode,criticalReactor,RefinedSilverBattery,
     //辅助
-    BlockSpotlight,miniWarehouse,BlockRepairer,
+    BlockSpotlight,miniWarehouse,BlockRepairer,LargemassDriver,
     //运输
-    QuartzConveyor,QuartzBridge,
+    QuartzConveyor,QuartzBridge,RefinedSilverConveyor,RefinedSilverBridge,UnRefinedSilver,
     //液体运输
     //钻头
-    MagnetoExplosionDrill,MagneticEnergyDrill,CrystalDrill,
+    MagnetoExplosionDrill,MagneticEnergyDrill,CrystalDrill,StorageRoom,
     //单位工厂
     NumberUpgradeUnitGenerator,MultiplierLevelUnitGenerator,MultiPowerUnitGenerator,UnboundedUnitGenerator,MultiScaleUnitReconstructionFactory;
 
@@ -246,6 +250,23 @@ public class dawnTideBlocks {
             itemCapacity = 10;
         }};
 
+        /*abc = new MultiCrafterBlock("multi-crafter"){{
+            requirements(Category.crafting, with(Items.copper, 30, Items.lead, 20));
+            health = 200;
+            size = 2;
+            hasRandomOutputRecipes = false;
+            autoSelectRecipe = false;
+
+            recipes.add(new Recipe("dawn-multi-silicon",
+                    new IOEntry().withItems(ItemStack.with(Items.copper,3,Items.silicon,3)).withPower(1.5f),
+                    new IOEntry().withItems(ItemStack.with(Items.silicon, 2)),80f).withCraftEffect(Fx.smeltsmoke).isUnlocked());
+
+            recipes.add(new Recipe("dawn-multi-water",
+                    new IOEntry().withItems(ItemStack.with(Items.lead, 2)),
+                    new IOEntry().withLiquids(LiquidStack.with(Liquids.water, 0.2f)),60f
+            ));
+        }};*/
+
 
         //矿物
 
@@ -405,7 +426,14 @@ public class dawnTideBlocks {
             requirements(Category.power, with(dawnTideItems.Quartz, 76, Items.lead, 100, Items.silicon, 120));
             size = 3;
             consumePowerBuffered(250000f);
-            baseExplosiveness = 7f;
+            baseExplosiveness = 12f;
+        }};
+
+        RefinedSilverBattery = new Battery("RefinedSilverBattery") {{//石英电池
+            requirements(Category.power, with(dawnTideItems.RefinedTitaniumSilver,100,dawnTideItems.Uranium,150,Items.plastanium,70,dawnTideItems.Steel,135));
+            size = 4;
+            consumePowerBuffered(5000000f);
+            baseExplosiveness = 23f;
         }};
 
 
@@ -416,6 +444,15 @@ public class dawnTideBlocks {
             radius = 140f;
             consumePower(0.05f);
             size = 3;
+        }};
+
+        LargemassDriver = new MassDriver("LargemassDriver"){{
+            requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
+            size = 4;
+            itemCapacity = 240;
+            reload = 150f;
+            range = 600f;
+            consumePower(2.5f);
         }};
 
         BlockRepairer = new MendProjector("BlockRepairer") {{//区块修复器
@@ -434,12 +471,19 @@ public class dawnTideBlocks {
         miniWarehouse = new StorageBlock("miniWarehouse") {{//微型仓库
             requirements(Category.effect, with(Items.titanium, 250, Items.thorium, 125));
             size = 1;
-            itemCapacity = 1000;
+            itemCapacity = 100;
+            scaledHealth = 55;
+        }};
+
+        StorageRoom = new StorageBlock("StorageRoom") {{//储藏室
+            requirements(Category.effect, with(dawnTideItems.RefinedTitaniumSilver,200, Items.thorium,250,dawnTideItems.Uranium,150,dawnTideItems.Steel,100));
+            size = 4;
+            itemCapacity = 5000;
             scaledHealth = 55;
         }};
 
 
-        //Conveyor
+        //运输
         QuartzConveyor = new Conveyor("QuartzConveyor") {{
             requirements(Category.distribution, with(dawnTideItems.Quartz, 1));
             health = 250;
@@ -456,6 +500,29 @@ public class dawnTideBlocks {
             arrowSpacing = 8f;
             bufferCapacity = 14;
             crushFragile = true;
+        }};
+
+        RefinedSilverBridge = new BufferedItemBridge("RefinedSilverBridge") {{
+            requirements(Category.distribution, with(dawnTideItems.Quartz, 3, Items.lead, 6));
+            fadeIn = moveArrows = false;
+            range = 15;
+            speed = 74f;
+            arrowSpacing = 17f;
+            bufferCapacity = 25;
+            crushFragile = true;
+        }};
+
+        RefinedSilverConveyor = new StackConveyor("RefinedSilverConveyor"){{//钛银带
+            requirements(Category.distribution, with(dawnTideItems.TitaniumSilver,1,Items.silicon,1));
+            health = 150;
+            speed = 4f / 60f;
+            itemCapacity = 30;
+        }};
+
+        UnRefinedSilver = new Unloader("UnRefinedSilver"){{
+            requirements(Category.distribution, with(dawnTideItems.TitaniumSilver,20,Items.thorium,25));
+            speed = 300f / 11f;
+            group = BlockGroup.transportation;
         }};
 
 
@@ -583,14 +650,28 @@ public class dawnTideBlocks {
             consumeLiquid(dawnTideLiquids.MicroscaleFluid, 5);
             requirements(Category.units, with(Items.silicon,450,dawnTideItems.OreCrystallization,550,dawnTideItems.RefinedTitaniumSilver,450,Items.plastanium,500,Items.lead,2500,Items.phaseFabric,400));
             plans = Seq.with(
-                    new UnitFactory.UnitPlan(UnitTypes.scepter, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
-                    new UnitFactory.UnitPlan(UnitTypes.vela, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
-                    new UnitFactory.UnitPlan(UnitTypes.arkyid, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
-                    new UnitFactory.UnitPlan(UnitTypes.antumbra, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
-                    new UnitFactory.UnitPlan(UnitTypes.quad, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
-                    new UnitFactory.UnitPlan(UnitTypes.sei, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
-                    new UnitFactory.UnitPlan(UnitTypes.aegires, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)));
+                    new UnitFactory.UnitPlan(UnitTypes.eclipse, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
+                    new UnitFactory.UnitPlan(UnitTypes.toxopid, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
+                    new UnitFactory.UnitPlan(UnitTypes.reign, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
+                    new UnitFactory.UnitPlan(UnitTypes.omura, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
+                    new UnitFactory.UnitPlan(UnitTypes.oct, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
+                    new UnitFactory.UnitPlan(UnitTypes.corvus, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)),
+                    new UnitFactory.UnitPlan(UnitTypes.navanax, 4800f, with(Items.silicon,550, dawnTideItems.TitaniumSilver,500,dawnTideItems.Steel,450)));
         }};
 
+        /*heatCrafter = new AttributeMultiCrafterBlock("heat-crafter"){{
+            requirements(Category.crafting, with(Items.titanium, 40));
+            size = 2;
+            attribute = Attribute.heat;   // 吃什么属性（Attribute.heat/oil/water...）
+            baseEfficiency = 1f;          // 底效率
+            boostScale = 1f;              // 每点属性加多少倍率
+            maxBoost = 3f;                // 加成上限
+
+            recipes.add(new Recipe("dawn-heat-smelt",
+                    new IOEntry().withItems(ItemStack.with(Items.scrap, 2)),
+                    new IOEntry().withItems(ItemStack.with(Items.titanium, 1)),
+                    90f
+            ));
+        }};*/
     }
 }

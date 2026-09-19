@@ -1,16 +1,8 @@
 package dawnTideMod.graphics;
 
 import arc.graphics.gl.Shader;
-
-/**
- * 模组自带的着色器集合。
- * GLSL 内嵌为字符串，避免依赖外部资源文件的加载路径。
- */
 public class DawnShaders{
-    /** 单位隐身时的低透明度重绘着色器；加载失败时保持 null。 */
     public static StealthShader stealthAlpha;
-
-    /** 惰性创建 GL 资源；只应在渲染线程调用。 */
     public static void load(){
         if(stealthAlpha != null) return;
         try{
@@ -19,11 +11,8 @@ public class DawnShaders{
             stealthAlpha = null;
         }
     }
-
-    /** 在原精灵着色器基础上，把最终 alpha 乘以 {@link #opacity}。 */
     public static class StealthShader extends Shader{
         public float opacity = 1f;
-
         public StealthShader(){
             super(
                 "attribute vec4 a_position;\n" +
@@ -49,7 +38,6 @@ public class DawnShaders{
                 "}\n"
             );
         }
-
         @Override
         public void apply(){
             setUniformf("u_opacity", opacity);
