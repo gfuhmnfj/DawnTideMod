@@ -1,6 +1,12 @@
 package dawnTideMod;
 
+import arc.scene.event.ClickListener;
+import arc.scene.event.InputEvent;
+import arc.scene.event.Touchable;
+import arc.scene.ui.Label;
+import arc.scene.ui.layout.Table;
 import dawnTideMod.content.*;
+import mindustry.Vars;
 import mindustry.mod.*;
 
 
@@ -15,15 +21,27 @@ public class dawnTide extends Mod {
         dawnTideLiquids.load();
         dawnTideTechTree.load();
         dawnTideStatuses.load();
+        dawnBullets.load();
+        dawnTurrets.load();
     }
-    /*@Override
+
+    @Override
     public void init(){
-        Table t = new Table();
-        t.setFillParent(true);
-        t.top().left();
-        t.visibility = () -> !Vars.state.isMenu();
-        button b = new button("曙光潮涌", () -> Vars.ui.showInfo("[accent]曙光潮涌[]：这是按钮添加的一段文字！"));
-        t.add(b).size(140f, 44f).padTop(80f).padLeft(12f);
-        Vars.ui.hudGroup.addChild(t);
-    }*/
+        if(!Vars.headless){
+            // HUD 左上角入口：一段文字，点击打开单位调试器
+            Table t = new Table();
+            t.setFillParent(true);
+            t.top().left();
+            t.touchable = Touchable.childrenOnly; // 只让子元素接收点击，不挡全屏操作
+            t.visibility = () -> !Vars.state.isMenu();
+            Label entry = t.add("[accent]曙光潮涌[]").padTop(80f).padLeft(12f).get();
+            entry.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    new UnitEditorDialog().show();
+                }
+            });
+            Vars.ui.hudGroup.addChild(t);
+        }
+    }
 }
