@@ -1,65 +1,64 @@
 package dawnTideMod.content;
 
 import arc.struct.Seq;
-import mindustry.content.*;
+import dawnTideMod.planets.DawnTidePlanet;
+import mindustry.content.Blocks;
+import mindustry.content.Items;
+import mindustry.content.Liquids;
+import mindustry.content.Planets;
+import mindustry.content.TechTree;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 import mindustry.type.SectorPreset;
 import static mindustry.content.SectorPresets.planetaryTerminal;
 
+public class DawnTideTechTree{
 
-public class dawnTideTechTree {
-    private static TechTree.TechNode context = null;
+    private static TechTree.TechNode context;
+
     public static Seq<TechTree.TechNode> roots = new Seq<>();
+
     public static void load(){
-        // 物品，液体，辅助，电力，单位工厂，墙
 
-        // 工厂
-        addToNext(Blocks.multiplicativeReconstructor,() -> {
-            node(dawnTideBlocks.NumberUpgradeUnitGenerator, Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {});
+        addToNext(Blocks.multiplicativeReconstructor, () -> {
+            node(DawnTideBlocks.numberUpgradeUnitGenerator,
+                Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {});
         });
-        addToNext(Blocks.router,() ->{
-            nodeProduce(dawnTideBlocks.miniWarehouse,() ->{});
+        addToNext(Blocks.router, () -> {
+            nodeProduce(DawnTideBlocks.miniWarehouse, () -> {});
         });
 
-
-        //物品
-        addToNext(Items.titanium,() ->{
-            nodeProduce(dawnTideItems.Iron,() ->{
-                nodeProduce(dawnTideItems.Quartz,() ->{});
+        addToNext(Items.titanium, () -> {
+            nodeProduce(DawnTideItems.iron, () -> {
+                nodeProduce(DawnTideItems.quartz, () -> {});
             });
-            nodeProduce(dawnTideItems.CeramicGlass,() ->{});
-            nodeProduce(dawnTideItems.fibrousFat,() ->{});
+            nodeProduce(DawnTideItems.ceramicGlass, () -> {});
+            nodeProduce(DawnTideItems.fibrousFat, () -> {});
         });
-        addToNext(Items.thorium,() ->{
-            nodeProduce(dawnTideItems.Steel,() ->{
-                nodeProduce(dawnTideItems.Uranium,() ->{});
+        addToNext(Items.thorium, () -> {
+            nodeProduce(DawnTideItems.steel, () -> {
+                nodeProduce(DawnTideItems.uranium, () -> {});
             });
         });
-        addToNext(dawnTideItems.Uranium,() ->{
-            nodeProduce(dawnTideItems.BoundaryBreakingAlloy,() ->{});
+        addToNext(DawnTideItems.uranium, () -> {
+            nodeProduce(DawnTideItems.boundaryBreakingAlloy, () -> {});
         });
-        addToNext(Items.blastCompound,() ->{
-            nodeProduce(dawnTideItems.HighExplosive,() ->{});
-        });
-
-        //液体
-        addToNext(Liquids.water,() ->{
-            nodeProduce(dawnTideLiquids.vulcanizing,() ->{});
+        addToNext(Items.blastCompound, () -> {
+            nodeProduce(DawnTideItems.highExplosive, () -> {});
         });
 
-        //星球与区块
-        addToNext(Planets.erekir,() ->{
-            node(dawnTidePlanets.dawnSector,() ->{});
+        addToNext(Liquids.water, () -> {
+            nodeProduce(DawnTideLiquids.vulcanizing, () -> {});
         });
 
-        //墙
-
+        addToNext(Planets.erekir, () -> {
+            node(DawnTidePlanet.dawnSector, () -> {});
+        });
     }
 
-    public static void addToNext(UnlockableContent content,Runnable run){
-        context = TechTree.all.find(t -> t.content == content);
+    public static void addToNext(UnlockableContent content, Runnable run){
+        context = TechTree.all.find(node -> node.content == content);
         run.run();
     }
 
@@ -89,9 +88,8 @@ public class dawnTideTechTree {
             node.objectives.addAll(objectives);
         }
 
-        //Java 11 兼容写法：不使用 instanceof 模式匹配（该语法需 Java 16+）
-        SectorPreset preset = (context != null && context.content instanceof SectorPreset) ? (SectorPreset)context.content : null;
-        if(preset != null && !node.objectives.contains(o -> o instanceof Objectives.SectorComplete && ((Objectives.SectorComplete)o).preset == preset)){
+        if(context != null && context.content instanceof SectorPreset preset
+            && !node.objectives.contains(o -> o instanceof Objectives.SectorComplete sector && sector.preset == preset)){
             node.objectives.insert(0, new Objectives.SectorComplete(preset));
         }
 

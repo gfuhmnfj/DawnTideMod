@@ -5,23 +5,23 @@ import dawnTideMod.content.entities.abilities.StealthStatusEffect;
 import mindustry.content.Fx;
 import mindustry.type.StatusEffect;
 
-public class dawnTideStatuses{
-    public static StatusEffect Stealth,MagneticDisorder;
+public class DawnTideStatuses{
+
+    public static StealthStatusEffect stealth;
+    public static StatusEffect magneticDisorder;
 
     public static void load(){
 
-        Stealth = new StealthStatusEffect("Stealth"){{
-            speedMultiplier = 2f;
-            color = Color.valueOf("F4F4F4FF");
-        }};//隐身
-        ((StealthStatusEffect)Stealth).install(); // 必须在赋值完成后调用，不能放进上面的 {{ }}（构造期间字段还是 null）
+        stealth = new StealthStatusEffect("Stealth");
+        stealth.speedMultiplier = 2f;
+        stealth.color = Color.valueOf("F4F4F4FF");
+        stealth.install();
 
-        MagneticDisorder = new StatusEffect("MagneticDisorder"){{//磁紊
-            color = Color.valueOf("F4F4F4FF");
-            speedMultiplier = 0.5f;
-            healthMultiplier = 0.5f;
-            reloadMultiplier = 0.5f;
-            effect = Fx.wet;
-            }};
+        magneticDisorder = new StatusEffect("MagneticDisorder");
+        magneticDisorder.color = Color.valueOf("F4F4F4FF");
+        magneticDisorder.speedMultiplier = 0.5f;
+        magneticDisorder.healthMultiplier = 0.5f;
+        magneticDisorder.reloadMultiplier = 0.5f;
+        magneticDisorder.effect = Fx.wet;
     }
 }

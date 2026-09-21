@@ -78,7 +78,13 @@ tasks.register('jarAndroid'){
                    "--output", "${projectName}Android.jar",
                    "${projectName}Desktop.jar"]
 
-        def working = new File(intermediatesLibs)
+        // 必须用绝对路径：Windows 的 CreateProcess 不接受相对路径作为工作目录，
+        // 而 Gradle daemon 的当前目录不一定是项目目录（用 -p 指定项目时就不是），
+        // 那样会报 "CreateProcess error=267, 目录名称无效"。
+        def working = new File(projectDir, intermediatesLibs)
+        // jar 任务如果是 UP-TO-DATE 就不会重新创建这个目录（例如刚 clean 过）
+        working.mkdirs()
+
         def proc = cmd.execute(null, working)
         proc.waitForProcessOutput(System.out, System.err)
         if(proc.exitValue() != 0) throw new GradleException("d8 failed with exit code ${proc.exitValue()}")

@@ -8,36 +8,43 @@ import arc.scene.ui.Label;
 import arc.util.Align;
 import mindustry.ui.Styles;
 
-
-public class dawnButton extends Button{
+public class DawnButton extends Button{
 
     public final Label label;
 
-    public dawnButton(String text, Runnable onClick){
+    public DawnButton(String text){
+        super(Styles.defaultt);
+        margin(8f);
+        marginTop(6f).marginBottom(8f);
+
+        label = add(text).grow().get();
+        label.setAlignment(Align.center);
+
+        setSize(getPrefWidth(), getPrefHeight());
+    }
+
+    public DawnButton(String text, Runnable onClick){
         this(text);
         changed(onClick);
     }
 
-    public dawnButton(String text){
-        super(Styles.defaultt);
-        margin(8f);
-        label = add(text).grow().get();
-        label.setAlignment(Align.center);
-        marginTop(6f).marginBottom(8f);
-        setSize(getPrefWidth(), getPrefHeight());
-    }
-
-
-    public dawnButton(String text, Drawable icon, Runnable onClick){
+    public DawnButton(String text, Drawable icon, Runnable onClick){
         this(text);
         add(new Image(icon)).size(24f).padRight(6f);
         getChildren().swap(0, 1);
         changed(onClick);
     }
 
-    public dawnButton text(String text){
+    public DawnButton text(String text){
         label.setText(text);
         return this;
+    }
+
+    public static DawnButton toggle(String text, boolean initial, Runnable onChange){
+        DawnButton button = new DawnButton(text);
+        button.setChecked(initial);
+        button.changed(onChange);
+        return button;
     }
 
     @Override
@@ -45,12 +52,5 @@ public class dawnButton extends Button{
         label.setColor(isOver() ? Color.white : Color.lightGray);
         if(isDisabled()) label.setColor(Color.darkGray);
         super.draw();
-    }
-
-    public static dawnButton toggle(String text, boolean initial, Runnable onChange){
-        dawnButton b = new dawnButton(text);
-        b.setChecked(initial);
-        b.changed(onChange);
-        return b;
     }
 }

@@ -1,0 +1,90 @@
+{
+        "type": "ContinuousTurret",
+        "name": "棱镜",
+        "description": "向敌人发射慢速单目标激光。",
+        "squareSprite": false,
+        "size": 4,
+        "attributes": {},
+        "scaledHealth": 210,
+        "health": 2750,
+        "consumes":{"power":32},
+        "offset": 4,
+        "sizeOffset": -1,
+        "clipSize": 32,
+        "lightClipSize": 32,
+        "placeOverlapRange": 306,
+        "requirements": ["钢/550", "silicon/400", "瓷化玻璃/800", "断界合金/400"],
+        "category": "turret",
+        "buildTime": 1200,
+        "buildVisibility": "shown",
+        "range": 240,
+        "rotateSpeed": 9,
+        "newTargetInterval": 20,
+        "shootCone": 360,
+        "shootY": 0.5,
+        "trackingRange": 250,
+        "shoot": {
+            "type": "ShootPattern"
+        },
+        "unitSort": "strongest",
+        "shootSound": "棱镜",
+        "loopSound": "beamLustre",
+        "loopSoundVolume": 1,
+        "shootWarmupSpeed": 10,//子弹飞行速度
+        "recoilTime": 10,
+        "elevation": 2,
+        "drawer": {
+            "type": "DrawTurret",
+            "parts": [
+                {
+                    "type": "RegionPart",
+                    "turretShading": true,
+                    "under": true,
+                    "suffix": "-blade",
+                    "heat": "lustre-blade-heat",
+                    "mirror": true,
+                    "moveX": 2,
+                    "moveRot": -7,
+                    "heatColor": "#ff6214ff",
+                    "moves": [
+                        {
+                            "y": -2,
+                            "rot": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "RegionPart",
+                    "turretShading": true,
+                    "suffix": "-inner",
+                    "heat": "lustre-inner-heat",
+                    "mirror": true,
+                    "moveX": 2,
+                    "moveY": -8,
+                    "heatColor": "#ff6214ff"
+                },
+                {
+                    "type": "RegionPart",
+                    "turretShading": true,
+                    "under": true,
+                    "suffix": "-mid",
+                    "heat": "lustre-mid-heat",
+                    "moveY": -8,
+                    "heatColor": "#ff6214ff"
+                }
+            ],
+            "basePrefix": "reinforced-",
+            "base": "reinforced-block-4",
+            "preview": "lustre-preview"
+        },
+        "shootType": {
+            "type": "PointLaserBulletType",
+            "damage": 60,
+            "buildingDamageMultiplier": 0.3,
+            "hitColor": "#fda981ff",
+            "lightningType": "damageLightning",
+            "lightRadius": 20
+        },
+        "aimChangeSpeed": 10,//子弹飞行速度
+        "scaleDamageEfficiency": true
+}
