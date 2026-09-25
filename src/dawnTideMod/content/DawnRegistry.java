@@ -1,14 +1,12 @@
 package dawnTideMod.content;
 
 import arc.Events;
-import dawnTideMod.logic.EnemyPathEstimate;
-import dawnTideMod.logic.WorldLogicRegistry;
-import dawnTideMod.multicrafter.MultiCrafterBlock;
-import dawnTideMod.multicrafter.type.DrawRecipe;
-import dawnTideMod.multicrafter.world.AttributeMultiCrafterBlock;
-import dawnTideMod.planets.DawnTidePlanet;
-import dawnTideMod.segment.DawnTideSegmentUnits;
-import dawnTideMod.world.WorldState;
+import dawnTideMod.TideClean.ui.logic.EnemyPathEstimate;
+import dawnTideMod.TideClean.ui.logic.WorldLogicRegistry;
+import dawnTideMod.TideClean.ui.multicrafter.MultiCrafterBlock;
+import dawnTideMod.TideClean.ui.multicrafter.type.DrawRecipe;
+import dawnTideMod.TideClean.ui.multicrafter.world.AttributeMultiCrafterBlock;
+import dawnTideMod.TideClean.ui.world.WorldState;
 import mindustry.game.EventType.ClientLoadEvent;
 import mindustry.mod.ClassMap;
 
@@ -28,7 +26,7 @@ public class DawnRegistry{
 
     public static void registerWorld(){
         DawnTidePlanet.load();
-        DawnTideSegmentUnits.load();
+        DawnTideUnitTypes.load();
         DawnTideTechTree.load();
         WorldState.init();
         WorldLogicRegistry.register();
@@ -41,8 +39,12 @@ public class DawnRegistry{
 
     public static void unload(){
         DawnControlPanel.unload();
-        dawnTideMod.planets.DawnTideRing.dispose();
+        dawnTideMod.TideClean.ui.planets.DawnTideRing.dispose();
         DawnTidePlanet.unload();
         WorldState.clear();
+    }
+
+    public static void apply(){
+        DawnTweaks.apply();
     }
 }

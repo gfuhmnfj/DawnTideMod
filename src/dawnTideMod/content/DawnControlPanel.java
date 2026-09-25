@@ -7,7 +7,7 @@ import arc.scene.ui.TextButton;
 import arc.scene.ui.layout.Table;
 import arc.util.Log;
 import arc.util.Time;
-import dawnTideMod.logic.EnemyPathEstimate;
+import dawnTideMod.TideClean.ui.logic.EnemyPathEstimate;
 import mindustry.Vars;
 import mindustry.game.Saves;
 import mindustry.ui.Styles;

@@ -8,7 +8,7 @@ import arc.scene.ui.layout.Table;
 import arc.util.Log;
 import dawnTideMod.content.DawnControlPanel;
 import dawnTideMod.content.DawnRegistry;
-import dawnTideMod.content.UnitEditorDialog;
+import dawnTideMod.TideClean.ui.UnitEditorDialog;
 import mindustry.Vars;
 import mindustry.mod.Mod;
 
@@ -16,7 +16,7 @@ public class DawnTide extends Mod{
 
     public DawnTide(){
         DawnRegistry.registerClasses();
-        Log.info("[曙光潮涌] 初始化…");
+        Log.info("");
     }
 
     @Override
@@ -24,7 +24,8 @@ public class DawnTide extends Mod{
         DawnRegistry.registerContent();
         super.loadContent();
         DawnRegistry.registerWorld();
-        Log.info("[曙光潮涌] 内容注册完成。");
+        DawnRegistry.apply();
+        Log.info("");
     }
 
     @Override
@@ -53,6 +54,6 @@ public class DawnTide extends Mod{
 
     public static void unload(){
         DawnRegistry.unload();
-        Log.info("[曙光潮涌] 已卸载。");
+        Log.info("");
     }
 }

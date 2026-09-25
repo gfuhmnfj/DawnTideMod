@@ -1,6 +1,7 @@
 package dawnTideMod.content;
 
 import arc.graphics.Color;
+import dawnTideMod.Bullet.DawnCritBulletType;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.BulletType;
 

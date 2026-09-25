@@ -2,8 +2,6 @@ package dawnTideMod.content;
 
 import arc.graphics.Color;
 import mindustry.type.Liquid;
-
-/** 「曙光潮涌」液体注册类。 */
 public class DawnTideLiquids{
 
     public static Liquid vulcanizing, microscaleFluid;

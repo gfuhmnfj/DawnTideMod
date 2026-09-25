@@ -4,7 +4,7 @@ import arc.Events;
 import arc.func.Boolf;
 import arc.graphics.g2d.Draw;
 import arc.struct.Seq;
-import dawnTideMod.graphics.DawnShaders;
+import dawnTideMod.TideClean.ui.graphics.DawnShaders;
 import mindustry.Vars;
 import mindustry.entities.units.StatusEntry;
 import mindustry.game.EventType.ContentInitEvent;

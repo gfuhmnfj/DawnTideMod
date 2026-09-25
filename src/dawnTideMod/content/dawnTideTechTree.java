@@ -1,7 +1,6 @@
 package dawnTideMod.content;
 
 import arc.struct.Seq;
-import dawnTideMod.planets.DawnTidePlanet;
 import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -11,6 +10,7 @@ import mindustry.ctype.UnlockableContent;
 import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 import mindustry.type.SectorPreset;
+
 import static mindustry.content.SectorPresets.planetaryTerminal;
 
 public class DawnTideTechTree{
@@ -23,8 +23,11 @@ public class DawnTideTechTree{
 
         addToNext(Blocks.multiplicativeReconstructor, () -> {
             node(DawnTideBlocks.numberUpgradeUnitGenerator,
-                Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {});
+                Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
+
+            });
         });
+
         addToNext(Blocks.router, () -> {
             nodeProduce(DawnTideBlocks.miniWarehouse, () -> {});
         });
@@ -47,11 +50,9 @@ public class DawnTideTechTree{
         addToNext(Items.blastCompound, () -> {
             nodeProduce(DawnTideItems.highExplosive, () -> {});
         });
-
         addToNext(Liquids.water, () -> {
             nodeProduce(DawnTideLiquids.vulcanizing, () -> {});
         });
-
         addToNext(Planets.erekir, () -> {
             node(DawnTidePlanet.dawnSector, () -> {});
         });
@@ -117,7 +118,6 @@ public class DawnTideTechTree{
         return nodeProduce(content, new Seq<>(), children);
     }
 
-    public static TechTree.TechNode nodeProduce(UnlockableContent content){
-        return nodeProduce(content,() -> {});
+    public static TechTree.TechNode nodeProduce(UnlockableContent content){return nodeProduce(content,() -> {});
     }
 }

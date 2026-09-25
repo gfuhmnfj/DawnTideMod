@@ -1,0 +1,166 @@
+package dawnTideMod.TideClean.ui.multicrafter.type;
+
+import arc.scene.ui.layout.Table;
+import arc.struct.Seq;
+import arc.util.Log;
+import dawnTideMod.TideClean.ui.multicrafter.meta.SimpleStatValues;
+import mindustry.type.*;
+import mindustry.world.blocks.payloads.Payload;
+
+public class IOEntry {
+    public ItemStack[] items = {};
+    public LiquidStack[] liquids = {};
+    public float power = 0;
+    public float heat = 0;
+    public Seq<PayloadStack> payloads = new Seq<>();
+
+    public IOEntry() {}
+
+    public IOEntry withItems(ItemStack... items) {
+        this.items = items;
+        return this;
+    }
+
+    public IOEntry withLiquids(LiquidStack... liquids) {
+        this.liquids = liquids;
+        return this;
+    }
+
+    public IOEntry withPower(float power) {
+        this.power = power;
+        return this;
+    }
+
+    public IOEntry withHeat(float heat) {
+        this.heat = heat;
+        return this;
+    }
+
+    public IOEntry withPayloads(PayloadStack... payloads) {
+        this.payloads = new Seq<>(payloads);
+        return this;
+    }
+
+    public Table buildTable(boolean perSecond, float craftTime) { return buildTable(true, perSecond, craftTime); }
+    public Table buildTable(boolean tooltip, boolean perSecond, float craftTime) {
+        Table table = new Table();
+        Table materialTable = new Table();
+
+        SimpleStatValues.count = 0;
+        SimpleStatValues.perSecond = perSecond;
+        SimpleStatValues.craftTime = craftTime;
+
+        SimpleStatValues.items(false, tooltip, items).display(materialTable);
+        SimpleStatValues.liquids(false, tooltip, liquids).display(materialTable);
+        SimpleStatValues.payloads(false, tooltip, payloads).display(materialTable);
+
+        Table smallIndictor = new Table();
+        if (power > 0) SimpleStatValues.power(power).display(smallIndictor);
+        if (heat > 0) SimpleStatValues.heat(heat).display(smallIndictor);
+
+        table.add(materialTable);
+        table.row();
+        table.add(smallIndictor);
+
+        return table;
+    }
+
+    public Table buildTableRandom(boolean perSecond, float craftTime) { return buildTableRandom(true, perSecond, craftTime); }
+    public Table buildTableRandom(boolean tooltip, boolean perSecond, float craftTime) {
+        Table table = new Table();
+        Table materialTable = new Table();
+
+        SimpleStatValues.count = 0;
+        SimpleStatValues.perSecond = perSecond;
+        SimpleStatValues.craftTime = craftTime;
+
+        int sum = 0;
+        for (ItemStack stack : items) sum += stack.amount;
+
+        SimpleStatValues.itemsPercent(false, tooltip, sum, items).display(materialTable);
+
+        table.add(materialTable);
+
+        return table;
+    }
+
+    public IOEntry removeDuplicate(String name) {
+        Seq<ItemStack> uniqueItems = new Seq<>();
+        Seq<LiquidStack> uniqueLiquids = new Seq<>();
+        Seq<PayloadStack> uniquePayloads = new Seq<>();
+
+        for (ItemStack stack : items) {
+            if (uniqueItems.contains(other -> other.item == stack.item)) {
+                Log.warn("Duplicate item '@' found in IOEntry for recipe '@', ignoring.", stack.item.name, name);
+                continue;
+            }
+            uniqueItems.add(stack);
+        }
+
+        for (LiquidStack stack : liquids) {
+            if (uniqueLiquids.contains(other -> other.liquid == stack.liquid)) {
+                Log.warn("Duplicate liquid '@' found in IOEntry for recipe '@', ignoring.", stack.liquid.name, name);
+                continue;
+            }
+            uniqueLiquids.add(stack);
+        }
+
+        for (PayloadStack stack : payloads) {
+            if (uniquePayloads.contains(other -> other.item == stack.item)) {
+                Log.warn("Duplicate payload '@' found in IOEntry for recipe '@', ignoring.", stack.item.name, name);
+                continue;
+            }
+            uniquePayloads.add(stack);
+        }
+
+        items = uniqueItems.toArray(ItemStack.class);
+        liquids = uniqueLiquids.toArray(LiquidStack.class);
+        payloads = uniquePayloads;
+
+        return this;
+    }
+
+    public boolean isEmpty() {
+        return items.length == 0 && liquids.length == 0 && power <= 0 && heat <= 0 && payloads.size == 0;
+    }
+
+    public boolean hasItems() {
+        return items.length > 0;
+    }
+
+    public boolean acceptItem(Item item) {
+        for (ItemStack stack : items) if (item == stack.item) return true;
+        return false;
+    }
+
+    public boolean hasLiquids() {
+        return liquids.length > 0;
+    }
+
+    public boolean acceptLiquid(Liquid liquid) {
+        for (LiquidStack stack : liquids) if (liquid == stack.liquid) return true;
+        return false;
+    }
+
+    public boolean hasPower() {
+        return power > 0;
+    }
+
+    public boolean hasHeat() {
+        return heat > 0;
+    }
+
+    public boolean hasPayloads() {
+        return payloads.size > 0;
+    }
+
+    public boolean acceptPayload(Payload payload) {
+        for (PayloadStack stack : payloads) if (payload.content() == stack.item) return true;
+        return false;
+    }
+
+    public int getPayloadRequirements(Payload payload) {
+        for (PayloadStack stack : payloads) if (payload.content() == stack.item) return stack.amount;
+        return 0;
+    }
+}
