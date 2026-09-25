@@ -7,7 +7,8 @@ public class DawnTideLiquids{
     public static Liquid vulcanizing, microscaleFluid;
 
     public static void load(){
-        vulcanizing = new Liquid("vulcanizing", Color.valueOf("FFAA5FFF")){{ // 硫化液
+        vulcanizing = new Liquid("vulcanizing", Color.valueOf("FFAA5FFF")){{
+            localizedName = "硫化液";
             gas = false;
             boilPoint = 2;
             flammability = 1f;
@@ -17,7 +18,8 @@ public class DawnTideLiquids{
             capPuddles = true;
         }};
 
-        microscaleFluid = new Liquid("MicroscaleFluid", Color.valueOf("FFAA5FFF")){{ // 微量流体
+        microscaleFluid = new Liquid("MicroscaleFluid", Color.valueOf("FFAA5FFF")){{
+            localizedName = "微米流体";
             gas = false;
             boilPoint = 0;
             temperature = -3f;

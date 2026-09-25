@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.core;
+package dawnTideMod.TideClean.core;
 
 import arc.Core;
 import arc.math.Mathf;

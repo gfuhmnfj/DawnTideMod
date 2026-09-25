@@ -4,7 +4,7 @@ import arc.Events;
 import arc.func.Boolf;
 import arc.graphics.g2d.Draw;
 import arc.struct.Seq;
-import dawnTideMod.TideClean.ui.graphics.DawnShaders;
+import dawnTideMod.TideClean.graphics.DawnShaders;
 import mindustry.Vars;
 import mindustry.entities.units.StatusEntry;
 import mindustry.game.EventType.ContentInitEvent;
@@ -22,7 +22,6 @@ import mindustry.world.blocks.defense.turrets.Turret.TurretBuild;
 
 public class StealthStatusEffect extends StatusEffect{
     public float opacity = 0.35f;
-
     private final Seq<Unit> activeUnits = new Seq<>();
     private final Seq<Unit> drawnUnits = new Seq<>();
     private boolean installed;
@@ -33,11 +32,9 @@ public class StealthStatusEffect extends StatusEffect{
     public void install(){
         if(installed) return;
         installed = true;
-
         Events.on(ContentInitEvent.class, event -> installTurretFilters());
         Events.on(ResetEvent.class, event -> clearUnits());
         Events.run(Trigger.afterGameUpdate, this::clearAutomaticTargets);
-
         if(!Vars.headless){
             Events.run(Trigger.draw, this::registerStealthDraws);
             Events.run(Trigger.postDraw, this::restoreNormalDraw);

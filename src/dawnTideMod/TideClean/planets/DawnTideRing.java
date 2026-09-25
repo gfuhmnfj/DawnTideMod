@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.planets;
+package dawnTideMod.TideClean.planets;
 
 import arc.graphics.Color;
 import mindustry.graphics.g3d.GenericMesh;
@@ -60,11 +60,5 @@ public class DawnTideRing{
         ring.seed = seed;
         ring.rotateSpeed = DawnTidePalette.RING_ROTATE_SPEED;
         return ring;
-    }
-
-    public static void dispose(){
-        if(innerRing instanceof RingMesh rm) rm.dispose();
-        if(outerRing instanceof RingMesh rm) rm.dispose();
-        innerRing = outerRing = null;
     }
 }

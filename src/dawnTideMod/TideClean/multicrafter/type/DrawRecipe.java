@@ -1,8 +1,8 @@
-package dawnTideMod.TideClean.ui.multicrafter.type;
+package dawnTideMod.TideClean.multicrafter.type;
 
 import arc.graphics.g2d.TextureRegion;
 import arc.util.Eachable;
-import dawnTideMod.TideClean.ui.multicrafter.MultiCrafterBlock;
+import dawnTideMod.TideClean.multicrafter.MultiCrafterBlock;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.world.Block;

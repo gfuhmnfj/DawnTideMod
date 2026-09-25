@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.multicrafter.type;
+package dawnTideMod.TideClean.multicrafter.type;
 
 import arc.util.Nullable;
 import arc.util.serialization.Json;

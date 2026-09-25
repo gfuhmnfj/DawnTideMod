@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.multicrafter.type;
+package dawnTideMod.TideClean.multicrafter.type;
 
 import arc.Core;
 import arc.math.Interp;
@@ -6,8 +6,8 @@ import arc.scene.ui.layout.Cell;
 import arc.scene.ui.layout.Table;
 import arc.util.Log;
 import arc.util.Time;
-import dawnTideMod.TideClean.ui.multicrafter.MultiCrafterBlock;
-import dawnTideMod.TideClean.ui.multicrafter.world.AttributeMultiCrafterBlock;
+import dawnTideMod.TideClean.multicrafter.MultiCrafterBlock;
+import dawnTideMod.TideClean.multicrafter.world.AttributeMultiCrafterBlock;
 import mindustry.content.Fx;
 import mindustry.content.TechTree;
 import mindustry.ctype.ContentType;

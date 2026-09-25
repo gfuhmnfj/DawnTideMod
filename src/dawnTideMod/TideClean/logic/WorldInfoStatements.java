@@ -1,7 +1,7 @@
-package dawnTideMod.TideClean.ui.logic;
+package dawnTideMod.TideClean.logic;
 
 import arc.scene.ui.layout.Table;
-import dawnTideMod.TideClean.ui.world.WorldState;
+import dawnTideMod.TideClean.world.WorldState;
 import mindustry.Vars;
 import mindustry.logic.LAssembler;
 import mindustry.logic.LExecutor;

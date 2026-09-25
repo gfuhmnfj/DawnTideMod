@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.logic;
+package dawnTideMod.TideClean.logic;
 
 import arc.Events;
 import arc.graphics.Color;

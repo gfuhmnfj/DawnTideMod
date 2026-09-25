@@ -1,6 +1,7 @@
 package dawnTideMod.content;
 
 import arc.struct.Seq;
+import dawnTideMod.TideClean.Wall.RegenWall;
 import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -54,15 +55,12 @@ public class DawnTideBlocks{
         magnetoExplosionDrill, magneticEnergyDrill, crystalDrill, storageRoom,
         // 单位工厂
         numberUpgradeUnitGenerator, multiplierLevelUnitGenerator, multiPowerUnitGenerator,
-        unboundedUnitGenerator, multiScaleUnitReconstructionFactory,
-        // 温控（原 DawnBlocks 并入）
-        thermalWall, heatProofWall, cryoWall, heatSource, cooler, cryoForge,
-        // 核心残骸
-        coreWreck, coreSalvage;
+        unboundedUnitGenerator, multiScaleUnitReconstructionFactory;
 
     public static void load(){
         //工厂
-        explosivesFactory = new GenericCrafter("ExplosivesFactory") {{ //炸药加工厂
+        explosivesFactory = new GenericCrafter("ExplosivesFactory") {{
+            localizedName = "炸药加工厂";
             requirements(Category.crafting, with(Items.titanium, 90, Items.silicon, 40, DawnTideItems.steel, 70));
             alwaysUnlocked = false;
             hasPower = true;
@@ -78,6 +76,7 @@ public class DawnTideBlocks{
         }};
 
         bariteFurnace = new GenericCrafter("BariteFurnace") {{ //重晶石熔炉
+            localizedName = "重晶石熔炉";
             requirements(Category.crafting, ItemStack.with(Items.graphite, 40, Items.titanium, 70, Items.silicon, 80));
             alwaysUnlocked = false;
             hasPower = true;
@@ -93,6 +92,7 @@ public class DawnTideBlocks{
         }};
 
         thermonuclearFurnace = new GenericCrafter("ThermonuclearFurnace") {{ //热核熔炉
+            localizedName = "热河熔炉";
             requirements(Category.crafting, ItemStack.with(DawnTideItems.steel, 130, Items.thorium, 150, Items.surgeAlloy, 60));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -109,6 +109,7 @@ public class DawnTideBlocks{
         }};
 
         sulfideElectrolysisCell = new GenericCrafter("SulfideElectrolysisCell") {{ //硫化物电解室
+            localizedName = "硫化物电解室";
             requirements(Category.crafting, ItemStack.with(Items.titanium, 70, Items.silicon, 85, Items.copper, 120));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -124,6 +125,7 @@ public class DawnTideBlocks{
         }};
 
         slagCooler = new GenericCrafter("SlagCooler") {{ //矿渣冷却机
+            localizedName = "矿渣冷却机";
             requirements(Category.crafting, ItemStack.with(Items.plastanium, 40, Items.titanium, 60, Items.silicon, 70));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -145,6 +147,7 @@ public class DawnTideBlocks{
         }};
 
         crystalSynthesizer = new GenericCrafter("CrystalSynthesizer") {{ //结晶合成机
+            localizedName = "结晶合成机";
             requirements(Category.crafting, ItemStack.with(Items.titanium, 70, Items.silicon, 90, Items.surgeAlloy, 120, Items.plastanium, 100));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -160,6 +163,7 @@ public class DawnTideBlocks{
         }};
 
         compositeSiliconPlant = new GenericCrafter("CompositeSiliconPlant") {{ //复合硅厂
+            localizedName = "复合硅厂";
             requirements(Category.crafting, ItemStack.with(Items.graphite, 80, DawnTideItems.steel, 70, Items.silicon, 60));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -176,6 +180,7 @@ public class DawnTideBlocks{
         }};
 
         forgingFurnace = new GenericCrafter("ForgingFurnace") {{ //锻钢炉
+            localizedName = "锻钢炉";
             requirements(Category.crafting, ItemStack.with(Items.graphite, 70, Items.metaglass, 60, Items.silicon, 90));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -192,6 +197,7 @@ public class DawnTideBlocks{
         }};
 
         glazeKiln = new GenericCrafter("GlazeKiln") {{ //镀瓷凿炉
+            localizedName = "镀瓷凿炉";
             requirements(Category.crafting, ItemStack.with(Items.titanium, 70, DawnTideItems.iron, 80, Items.silicon, 90));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -208,6 +214,7 @@ public class DawnTideBlocks{
         }};
 
         titaniumSilverMeltingFurnace = new GenericCrafter("TitaniumSilverMeltingFurnace") {{ //钛银熔炉
+            localizedName = "钛银熔炉";
             requirements(Category.crafting, ItemStack.with(DawnTideItems.quartz, 90, DawnTideItems.ceramicGlass, 80, Items.silicon, 90, DawnTideItems.oreCrystallization, 50, Items.plastanium, 85));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -224,6 +231,7 @@ public class DawnTideBlocks{
         }};
 
         blueCrystalCompressor = new GenericCrafter("BlueCrystalCompressor") {{ //蓝晶压缩机
+            localizedName = "蓝晶压缩机";
             requirements(Category.crafting, ItemStack.with(DawnTideItems.quartz, 90, DawnTideItems.ceramicGlass, 80, Items.silicon, 90, DawnTideItems.oreCrystallization, 50, Items.plastanium, 85));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -240,6 +248,7 @@ public class DawnTideBlocks{
         }};
 
         fluxReactor = new GenericCrafter("fluxReactor") {{ //通量反应炉
+            localizedName = "通量反应炉";
             requirements(Category.crafting, ItemStack.with(DawnTideItems.quartz, 90, DawnTideItems.ceramicGlass, 80, Items.silicon, 90, DawnTideItems.oreCrystallization, 50, Items.plastanium, 85));
             alwaysUnlocked = false;
             craftEffect = Fx.pulverizeMedium;
@@ -248,7 +257,7 @@ public class DawnTideBlocks{
             consumePower(5f);
             hasPower = true;
             health = 550;
-            size = 3;
+            size = 4;
             hasItems = true;
             craftTime = 99f;
             buildTime = 270f;
@@ -276,36 +285,42 @@ public class DawnTideBlocks{
         //矿物
 
         quartzOre = new OreBlock(DawnTideItems.quartz) {{
+            localizedName = "石英矿";
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
         }};
 
         ironOre = new OreBlock(DawnTideItems.iron) {{
+            localizedName = "铁矿";
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
         }};
 
         uraniumOre = new OreBlock(DawnTideItems.uranium) {{
+            localizedName = "铀矿";
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
         }};
 
         titaniumSilverOre = new OreBlock(DawnTideItems.titaniumSilver) {{
+            localizedName = "钛银矿";
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
         }};
 
         oreCrystallizationOre = new OreBlock(DawnTideItems.oreCrystallization) {{
+            localizedName = "矿石结晶矿";
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
         }};
 
         bariteOre = new OreBlock(DawnTideItems.barite) {{
+            localizedName = "重晶石矿";
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
@@ -314,17 +329,20 @@ public class DawnTideBlocks{
 
         //墙
         siliconWall = new Wall("SiliconWall") {{ //硅墙
+            localizedName = "硅墙";
             requirements(Category.defense, with(Items.silicon, 6));
             health = 650;
         }};
 
         siliconWallLarge = new Wall("SiliconWallLarge") {{ //大型硅墙
+            localizedName = "大型硅墙";
             requirements(Category.defense, with(Items.silicon, 24));
             health = 2600;
             size = 2;
         }};
 
-        giantSiliconWall = new RegenWall("GiantSiliconWall") {{ //巨型硅墙（再生墙：每秒回复0.6%血量）
+        giantSiliconWall = new RegenWall("GiantSiliconWall") {{
+            localizedName = "巨型硅墙";
             requirements(Category.defense, with(Items.silicon, 54));
             health = 3900;
             insulated = true;
@@ -332,33 +350,38 @@ public class DawnTideBlocks{
             schematicPriority = 10;
             armor = 5;
             size = 3;
-            healInterval = 60f;   // 每 60 帧（1 秒）结算一次
-            healPercent = 0.01f;  // 每次回复最大血量的 1%
+            healInterval = 60f;//每秒一次
+            healPercent = 0.01f;//每次回血1%
         }};
 
         steelWall = new Wall("ChemicalDefenseWall") {{ //钢墙
+            localizedName = "钢墙";
             requirements(Category.defense, with(DawnTideItems.ceramicGlass, 6));
             health = 450;
         }};
 
         steelWallLarge = new Wall("ChemicalDefenseWallLarge") {{ //大型钢墙
+            localizedName = "大型钢墙";
             requirements(Category.defense, with(DawnTideItems.ceramicGlass, 24));
             health = 2300;
             size = 2;
         }};
 
         erosionResistantWall = new Wall("ErosionResistantWall") {{ //蚀抗墙
+            localizedName = "蚀抗墙";
             requirements(Category.defense, with(DawnTideItems.boundaryBreakingAlloy, 6, DawnTideItems.iron, 6));
             health = 800;
         }};
 
         erosionResistantWallLarge = new Wall("ErosionResistantWallLarge") {{ //大型蚀抗墙
+            localizedName = "大型蚀抗墙";
             requirements(Category.defense, with(DawnTideItems.boundaryBreakingAlloy, 24, DawnTideItems.iron, 24));
             health = 3666;
             size = 2;
         }};
 
         giantCopperWall = new Wall("GiantCopperWall") {{ //巨型铜墙
+            localizedName = "巨型铜墙";
             requirements(Category.defense, with(Items.copper, 54));
             health = 1999;
             armor = 2;
@@ -366,6 +389,7 @@ public class DawnTideBlocks{
         }};
 
         giantTitaniumWall = new Wall("GiantTitaniumWall") {{ //巨型钛墙
+            localizedName = "巨型钛墙";
             requirements(Category.defense, with(Items.titanium, 54));
             health = 2600;
             armor = 3;
@@ -373,6 +397,7 @@ public class DawnTideBlocks{
         }};
 
         giantThoriumWall = new Wall("GiantThoriumWall") {{ //巨型钍墙
+            localizedName = "巨型钍墙";
             requirements(Category.defense, with(Items.thorium, 54));
             health = 4555;
             armor = 4;
@@ -380,11 +405,13 @@ public class DawnTideBlocks{
         }};
 
         crystalWall = new Wall("CrystalWall") {{ //碎晶墙
+            localizedName = "碎晶墙";
             requirements(Category.defense, with(DawnTideItems.quartz, 6, DawnTideItems.steel, 6));
             health = 540;
         }};
 
         crystalWallLarge = new Wall("CrystalWallLarge") {{ //大型碎晶墙
+            localizedName = "大型碎晶墙";
             requirements(Category.defense, with(DawnTideItems.quartz, 24, DawnTideItems.steel, 24));
             health = 2900;
             size = 2;
@@ -392,22 +419,23 @@ public class DawnTideBlocks{
 
 
         //电力
-        criticalReactor = new ConsumeGenerator("criticalReactor") {{ //临界反应堆
+        criticalReactor = new NuclearReactor("criticalReactor") {{ //临界反应堆
+            localizedName = "临界反应堆";
             requirements(Category.power, with(DawnTideItems.steel, 250, Items.thorium, 150, Items.graphite, 270, Items.silicon, 180, Items.lead, 300));
             powerProduction = 25f;
             itemDuration = 270f;
-            hasLiquids = true;
-            hasItems = true;
             size = 3;
             ambientSound = Sounds.loopDifferential;
-            generateEffect = Fx.generatespark;
             ambientSoundVolume = 0.12f;
+            fuelItem = DawnTideItems.highExplosive;
+            // 接收/显示输入（NuclearReactor 类自身不注册消费器，acceptItem/acceptLiquid 全靠这里驱动）
+            // 燃料：每 itemDuration 由 updateTile 的 consume() 扣 1；冷却液：只声明接收，热量吸取由 updateTile 自己扣（update(false) 防止每帧额外扣液）
             consumeItem(DawnTideItems.highExplosive);
-            consumeLiquid(Liquids.cryofluid, 0.1f);
-            //drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion(), new DrawLiquidRegion());
+            consumeLiquid(Liquids.cryofluid, heating / coolantPower).update(false);
         }};
 
         tidalPowerGenerator = new ThermalGenerator("tidalPowerGenerator") {{ //潮汐发电机
+            localizedName = "潮汐发电机";
             requirements(Category.power, with(DawnTideItems.ceramicGlass, 50, Items.silicon, 40, DawnTideItems.iron, 60, Items.titanium, 70));
             powerProduction = 1.5f;
             generateEffect = Fx.redgeneratespark;
@@ -420,6 +448,8 @@ public class DawnTideBlocks{
         }};
 
         quartzPowerNode = new PowerNode("QuartzPowerNode") {{ //石英电力节点
+            size = 3;
+            localizedName = "石英电力节点";
             requirements(Category.power, with(DawnTideItems.quartz, 10, Items.titanium, 10, Items.graphite, 10));
             maxNodes = 30;
             laserRange = 30;
@@ -428,6 +458,7 @@ public class DawnTideBlocks{
         }};
 
         quartzBattery = new Battery("QuartzBattery") {{ //石英电池
+            localizedName = "石英电池";
             requirements(Category.power, with(DawnTideItems.quartz, 76, Items.lead, 100, Items.silicon, 120));
             size = 3;
             consumePowerBuffered(250000f);
@@ -435,6 +466,7 @@ public class DawnTideBlocks{
         }};
 
         refinedSilverBattery = new Battery("RefinedSilverBattery") {{ //石英电池
+            localizedName = "钛银电池";
             requirements(Category.power, with(DawnTideItems.refinedTitaniumSilver, 100, DawnTideItems.uranium, 150, Items.plastanium, 70, DawnTideItems.steel, 135));
             size = 4;
             consumePowerBuffered(5000000f);
@@ -444,6 +476,7 @@ public class DawnTideBlocks{
 
         //辅助
         blockSpotlight = new LightBlock("BlockSpotlight") {{ //区块探照灯
+            localizedName = "区块探照灯";
             requirements(Category.effect, BuildVisibility.lightingOnly, with(Items.graphite, 12, Items.silicon, 8, Items.lead, 8));
             brightness = 0.75f;
             radius = 140f;
@@ -452,6 +485,7 @@ public class DawnTideBlocks{
         }};
 
         largeMassDriver = new MassDriver("LargemassDriver"){{
+            localizedName = "大型质量驱动器";
             requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50));
             size = 4;
             itemCapacity = 240;
@@ -461,11 +495,12 @@ public class DawnTideBlocks{
         }};
 
         blockRepairer = new MendProjector("BlockRepairer") {{ //区块修复器
+            localizedName = "区块修复器";
             requirements(Category.effect, with(Items.lead, 100, Items.titanium, 25, Items.silicon, 40, Items.copper, 50));
             consumePower(1.5f);
             size = 3;
             reload = 210f;
-            range = 210f;
+            range = 240f;
             healPercent = 8f;
             phaseBoost = 11f;
             scaledHealth = 80;
@@ -473,6 +508,7 @@ public class DawnTideBlocks{
         }};
 
         miniWarehouse = new StorageBlock("miniWarehouse") {{ //微型仓库
+            localizedName = "微型仓库";
             requirements(Category.effect, with(Items.titanium, 250, Items.thorium, 125));
             size = 1;
             itemCapacity = 100;
@@ -480,6 +516,7 @@ public class DawnTideBlocks{
         }};
 
         storageRoom = new StorageBlock("StorageRoom") {{ //储藏室
+            localizedName = "储藏室";
             requirements(Category.effect, with(DawnTideItems.refinedTitaniumSilver, 200, Items.thorium, 250, DawnTideItems.uranium, 150, DawnTideItems.steel, 100));
             size = 4;
             itemCapacity = 5000;
@@ -489,6 +526,7 @@ public class DawnTideBlocks{
 
         //运输
         quartzConveyor = new Conveyor("QuartzConveyor") {{
+            localizedName = "石英传送带";
             requirements(Category.distribution, with(DawnTideItems.quartz, 1));
             health = 250;
             speed = 0.25f;
@@ -497,6 +535,7 @@ public class DawnTideBlocks{
         }};
 
         quartzBridge = new BufferedItemBridge("QuartzBridge") {{
+            localizedName = "石英传送带桥";
             requirements(Category.distribution, with(DawnTideItems.quartz, 3, Items.lead, 6));
             fadeIn = moveArrows = false;
             range = 6;
@@ -507,6 +546,7 @@ public class DawnTideBlocks{
         }};
 
         refinedSilverBridge = new BufferedItemBridge("RefinedSilverBridge") {{
+            localizedName = "钛银传送带桥";
             requirements(Category.distribution, with(DawnTideItems.quartz, 3, Items.lead, 6));
             fadeIn = moveArrows = false;
             range = 15;
@@ -517,6 +557,7 @@ public class DawnTideBlocks{
         }};
 
         refinedSilverConveyor = new StackConveyor("RefinedSilverConveyor"){{ //钛银带
+            localizedName = "钛银传送带";
             requirements(Category.distribution, with(DawnTideItems.titaniumSilver, 1, Items.silicon, 1));
             health = 150;
             speed = 4f / 60f;
@@ -524,6 +565,7 @@ public class DawnTideBlocks{
         }};
 
         unRefinedSilver = new Unloader("UnRefinedSilver"){{
+            localizedName = "钛银装卸器";
             requirements(Category.distribution, with(DawnTideItems.titaniumSilver, 20, Items.thorium, 25));
             speed = 300f / 11f;
             group = BlockGroup.transportation;
@@ -532,6 +574,7 @@ public class DawnTideBlocks{
 
         //Production
         magnetoExplosionDrill = new Drill("MagnetoExplosionDrill") {{
+            localizedName = "磁爆钻头";
             requirements(Category.production, with(DawnTideItems.steel, 100, DawnTideItems.boundaryBreakingAlloy, 30, Items.silicon, 80, Items.thorium, 120));
             drillTime = 99;
             size = 4;
@@ -551,6 +594,7 @@ public class DawnTideBlocks{
         }};
 
         magneticEnergyDrill = new Drill("MagneticEnergyDrill") {{
+            localizedName = "磁能钻头";
             requirements(Category.production, with(DawnTideItems.steel, 100, DawnTideItems.boundaryBreakingAlloy, 30, Items.silicon, 80, Items.thorium, 120));
             drillTime = 115;
             health = 450;
@@ -570,6 +614,7 @@ public class DawnTideBlocks{
         }};
 
         crystalDrill = new Drill("CrystalDrill") {{
+            localizedName = "晶石钻头";
             requirements(Category.production, with(DawnTideItems.steel, 100, DawnTideItems.boundaryBreakingAlloy, 30, Items.silicon, 80, Items.thorium, 120));
             drillTime = 140;
             health = 320;
@@ -591,6 +636,7 @@ public class DawnTideBlocks{
 
         //Units
         numberUpgradeUnitGenerator = new UnitFactory("NumberUpgradeUnitGenerator") {{ //数增级单位生成器
+            localizedName = "数增级单位生成器";
             hasPower = true;
             requirements(Category.units, with(Items.copper, 200, Items.lead, 150, Items.silicon, 100));
             plans = Seq.with(
@@ -607,6 +653,7 @@ public class DawnTideBlocks{
         }};
 
         multiplierLevelUnitGenerator = new UnitFactory("MultiplierLevelUnitGenerator") {{ //倍乘级
+            localizedName = "倍乘级单位生成器";
             health = 3130;
             size = 5;
             hasPower = true;
@@ -626,6 +673,7 @@ public class DawnTideBlocks{
         }};
 
         multiPowerUnitGenerator = new UnitFactory("MultiPowerUnitGenerator") {{ //多幂级
+            localizedName = "多幂级单位生成器";
             health = 4400;
             size = 5;
             hasPower = true;
@@ -645,6 +693,7 @@ public class DawnTideBlocks{
         }};
 
         unboundedUnitGenerator = new UnitFactory("UnboundedUnitGenerator") {{ //无量级
+            localizedName = "无量级单位生成器";
             health = 5500;
             size = 5;
             hasPower = true;
@@ -662,123 +711,5 @@ public class DawnTideBlocks{
                     new UnitFactory.UnitPlan(UnitTypes.corvus, 4800f, with(Items.silicon, 550, DawnTideItems.titaniumSilver, 500, DawnTideItems.steel, 450)),
                     new UnitFactory.UnitPlan(UnitTypes.navanax, 4800f, with(Items.silicon, 550, DawnTideItems.titaniumSilver, 500, DawnTideItems.steel, 450)));
         }};
-
-        /*heatCrafter = new AttributeMultiCrafterBlock("heat-crafter"){{
-            requirements(Category.crafting, with(Items.titanium, 40));
-            size = 2;
-            attribute = Attribute.heat;   // 吃什么属性（Attribute.heat/oil/water...）
-            baseEfficiency = 1f;          // 底效率
-            boostScale = 1f;              // 每点属性加多少倍率
-            maxBoost = 3f;                // 加成上限
-
-            recipes.add(new Recipe("dawn-heat-smelt",
-                    new IOEntry().withItems(ItemStack.with(Items.scrap, 2)),
-                    new IOEntry().withItems(ItemStack.with(Items.titanium, 1)),
-                    90f
-            ));
-        }};*/
-
-//        loadThermal();
-//        loadThermalCrafter();
-//        loadCore();
     }
-
-//    private static void loadThermal(){
-//        thermalWall = new ThermalWall("dawn-thermal-wall"){{
-//            health = 800;
-//            size = 1;
-//            ambientTemp = 0.5f;
-//            thermalMass = 1f;
-//            heatResist = 0f;
-//            coldResist = 0f;
-//        }};
-//        thermalWall.requirements(Category.defense, with(Items.copper, 12, Items.lead, 8));
-//
-//        heatProofWall = new ThermalWall("dawn-heatproof-wall"){{
-//            health = 900;
-//            size = 1;
-//            ambientTemp = 0.8f;
-//            thermalMass = 1.4f;
-//            heatResist = 1f;
-//            coldResist = 0f;
-//        }};
-//        heatProofWall.requirements(Category.defense, with(Items.titanium, 12, Items.metaglass, 8));
-//
-//        cryoWall = new ThermalWall("dawn-cryo-wall"){{
-//            health = 900;
-//            size = 1;
-//            ambientTemp = 0.15f;
-//            thermalMass = 1.4f;
-//            heatResist = 0f;
-//            coldResist = 1f;
-//        }};
-//        cryoWall.requirements(Category.defense, with(Items.titanium, 12, Items.metaglass, 8));
-//
-//        heatSource = new ThermalProducer("dawn-heat-source"){{
-//            health = 320;
-//            size = 2;
-//            targetTemp = 0.95f;
-//            warmupRate = 0.03f;
-//            heatOutput = 15f;
-//            thermalMass = 2f;
-//            heatResist = 0.6f;
-//        }};
-//        heatSource.requirements(Category.effect, with(Items.copper, 40, Items.graphite, 25, Items.silicon, 20));
-//
-//        cooler = new ThermalCooler("dawn-cooler"){{
-//            health = 320;
-//            size = 2;
-//            targetTemp = 0.05f;
-//            coolRate = 0.03f;
-//            coolOutput = 15f;
-//            thermalMass = 2f;
-//            coldResist = 0.6f;
-//        }};
-//        cooler.requirements(Category.effect, with(Items.copper, 40, Items.metaglass, 30, Items.silicon, 20));
-//    }
-//
-//    private static void loadThermalCrafter(){
-//        cryoForge = new ThermalCrafter("dawn-cryo-forge"){{
-//            health = 420;
-//            size = 3;
-//            craftTime = 90f;
-//            craftEffect = Fx.smeltsmoke;
-//            updateEffect = Fx.freezing;
-//            outputItem = new ItemStack(Items.metaglass, 3);
-//            coldItems = with(Items.sand, 2, Items.lead, 1);
-//            maxOperatingTemp = 0.35f;
-//            minTempEfficiency = 0.1f;
-//            thermalMass = 1.5f;
-//            coldResist = 1f;
-//            ambientTemp = 0.5f;
-//            hasPower = true;
-//            consumePower(1.2f);
-//        }};
-//        cryoForge.requirements(Category.crafting,
-//            with(Items.copper, 60, Items.lead, 50, Items.titanium, 40, Items.silicon, 35));
-//    }
-//
-//    private static void loadCore(){
-//        coreWreck = new CoreWreck("dawn-core-wreck"){{
-//            health = 250;
-//            size = 3;
-//            salvageFrac = 0.6f;
-//            decay = false;
-//        }};
-//
-//        coreSalvage = new WreckableCore("dawn-core-salvage"){{
-//            health = 3000;
-//            size = 4;
-//            itemCapacity = 8000;
-//            wreckBlock = coreWreck;
-//            wreckHealthFrac = 0.25f;
-//            salvageFrac = 0.6f;
-//            transferItems = true;
-//            silentCollapse = true;
-//            alwaysUnlocked = false;
-//            buildVisibility = BuildVisibility.shown;
-//        }};
-//        coreSalvage.requirements(Category.effect,
-//            with(Items.copper, 1500, Items.lead, 1200, Items.silicon, 800, Items.titanium, 600));
-//    }
 }

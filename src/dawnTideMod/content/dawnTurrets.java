@@ -7,7 +7,7 @@ import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import arc.util.Scaling;
 import arc.util.Strings;
-import dawnTideMod.Bullet.DawnCritBulletType;
+import dawnTideMod.TideClean.Bullet.DawnCritBulletType;
 import mindustry.content.Bullets;
 import mindustry.content.Items;
 import mindustry.content.StatusEffects;
@@ -34,6 +34,7 @@ public class DawnTurrets{
     public static void load(){
         tideCannon = new ItemTurret("tide-cannon"){
             {
+                localizedName = "测试炮台";
                 requirements(Category.turret, ItemStack.with(Items.copper, 120, Items.graphite, 80));
                 health = 420;
                 size = 2;
@@ -42,8 +43,8 @@ public class DawnTurrets{
                 inaccuracy = 3f;
                 rotateSpeed = 6f;
                 ammo(
-                    Items.copper, DawnBullets.tideCrit,
-                    Items.graphite, DawnBullets.tideCritHeavy
+                        Items.copper, DawnBullets.tideCrit,
+                        Items.graphite, DawnBullets.tideCritHeavy
                 );
                 limitRange(2f);
             }

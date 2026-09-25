@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.thermal;
+package dawnTideMod.TideClean.thermal;
 
 import arc.graphics.Color;
 import mindustry.graphics.Pal;

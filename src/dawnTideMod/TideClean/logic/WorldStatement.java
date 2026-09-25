@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.logic;
+package dawnTideMod.TideClean.logic;
 
 import arc.func.Cons;
 import arc.scene.ui.layout.Cell;
@@ -97,7 +97,11 @@ public abstract class WorldStatement extends LStatement{
     }
 
     protected static LExecutor.LInstruction inst(Cons<LExecutor> body){
-        return body::get;
+        return exec -> {
+            if(dawnTideMod.TideClean.world.WorldState.trySpend()){
+                body.get(exec);
+            }
+        };
     }
 
 }

@@ -1,8 +1,8 @@
 package dawnTideMod.content;
 
 import arc.graphics.Color;
-import dawnTideMod.TideClean.ui.segment.SegmentFollowAI;
-import dawnTideMod.TideClean.ui.segment.SegmentUnitType;
+import dawnTideMod.TideClean.segment.SegmentFollowAI;
+import dawnTideMod.TideClean.segment.SegmentUnitType;
 import mindustry.ai.types.GroundAI;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.BasicBulletType;

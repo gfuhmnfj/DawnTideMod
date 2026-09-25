@@ -1,8 +1,8 @@
 package dawnTideMod.content;
 
 import arc.graphics.Color;
-import dawnTideMod.TideClean.ui.planets.DawnTidePalette;
-import dawnTideMod.TideClean.ui.planets.DawnTideRing;
+import dawnTideMod.TideClean.planets.DawnTidePalette;
+import dawnTideMod.TideClean.planets.DawnTideRing;
 import mindustry.content.Planets;
 import mindustry.game.Team;
 import mindustry.graphics.g3d.HexMesh;
@@ -25,6 +25,7 @@ public class DawnTidePlanet{
     public static void load() {
 
         dawn = new Planet("dawn-tide", Planets.sun, 1f, 2) {{
+            localizedName = "什么星球";
             generator = new ErekirPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 5);
             cloudMeshLoader = () -> new MultiMesh(
@@ -79,6 +80,7 @@ public class DawnTidePlanet{
                 new HexSkyMesh(dawn, 3, 0.6f, 0.15f, 5,
                         DawnTidePalette.CLOUD_2.a(0.75f), 2, 0.42f, 1.2f, 0.45f)
         ));
+
         dawnSector = new SectorPreset("dawn-sector", "dawn-sector", dawn, 15) {{
             difficulty = 3f;
             captureWave = 30;
@@ -89,30 +91,5 @@ public class DawnTidePlanet{
                 r.waveSpacing = 60f * 2f;
             };
         }};
-    }
-    public static void unload(){
-        if(dawnSector != null){
-            dawnSector.removeContent();
-            dawnSector = null;
-        }
-        disposePlanet(dawnMoon);
-        disposePlanet(dawn);
-        dawnMoon = null;
-        dawn = null;
-    }
-    private static void disposePlanet(Planet planet){
-        if(planet == null) return;
-        if(planet.parent != null){
-            planet.parent.children.remove(planet);
-            planet.parent.updateTotalRadius();
-        }
-        if(planet.mesh != null){
-            planet.mesh.dispose();
-            planet.mesh = null;
-        }
-        if(planet.cloudMesh != null){
-            planet.cloudMesh.dispose();
-            planet.cloudMesh = null;
-        }
     }
 }

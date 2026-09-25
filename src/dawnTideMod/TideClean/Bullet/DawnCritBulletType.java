@@ -1,4 +1,4 @@
-package dawnTideMod.Bullet;
+package dawnTideMod.TideClean.Bullet;
 
 import arc.math.Mathf;
 import mindustry.content.Fx;

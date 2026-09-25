@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.graphics;
+package dawnTideMod.TideClean.graphics;
 
 import arc.graphics.gl.Shader;
 public class DawnShaders{

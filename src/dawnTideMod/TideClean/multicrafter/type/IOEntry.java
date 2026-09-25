@@ -1,9 +1,9 @@
-package dawnTideMod.TideClean.ui.multicrafter.type;
+package dawnTideMod.TideClean.multicrafter.type;
 
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.Log;
-import dawnTideMod.TideClean.ui.multicrafter.meta.SimpleStatValues;
+import dawnTideMod.TideClean.multicrafter.meta.SimpleStatValues;
 import mindustry.type.*;
 import mindustry.world.blocks.payloads.Payload;
 

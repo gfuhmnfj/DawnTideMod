@@ -12,13 +12,15 @@ public class DawnTideStatuses{
 
     public static void load(){
 
-        stealth = new StealthStatusEffect("Stealth"){{//隐身
+        stealth = new StealthStatusEffect("Stealth"){{
+            localizedName = "隐身";
             speedMultiplier = 2f;
             color = Color.valueOf("F4F4F4FF");
             install();
         }};
 
-        magneticDisorder = new StatusEffect("MagneticDisorder"){{//磁紊
+        magneticDisorder = new StatusEffect("MagneticDisorder"){{
+            localizedName = "磁紊";
             color = Color.valueOf("F4F4F4FF");
             speedMultiplier = 0.5f;
             healthMultiplier = 0.5f;

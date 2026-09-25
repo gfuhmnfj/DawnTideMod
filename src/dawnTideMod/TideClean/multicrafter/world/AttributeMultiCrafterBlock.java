@@ -1,7 +1,7 @@
-package dawnTideMod.TideClean.ui.multicrafter.world;
+package dawnTideMod.TideClean.multicrafter.world;
 
 import arc.Core;
-import dawnTideMod.TideClean.ui.multicrafter.MultiCrafterBlock;
+import dawnTideMod.TideClean.multicrafter.MultiCrafterBlock;
 import mindustry.game.Team;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;

@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.segment;
+package dawnTideMod.TideClean.segment;
 
 import arc.math.Angles;
 import arc.math.Mathf;

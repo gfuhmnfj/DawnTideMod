@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.multicrafter.meta;
+package dawnTideMod.TideClean.multicrafter.meta;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;

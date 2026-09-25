@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.segment;
+package dawnTideMod.TideClean.segment;
 
 import arc.util.Log;
 import mindustry.type.UnitType;

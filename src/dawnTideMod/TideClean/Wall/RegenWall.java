@@ -1,4 +1,4 @@
-package dawnTideMod.content;
+package dawnTideMod.TideClean.Wall;
 
 import arc.math.Mathf;
 import arc.util.Strings;

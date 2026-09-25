@@ -1,7 +1,7 @@
-package dawnTideMod.TideClean.ui.logic;
+package dawnTideMod.TideClean.logic;
 
 import arc.scene.ui.layout.Table;
-import dawnTideMod.TideClean.ui.world.WorldState;
+import dawnTideMod.TideClean.world.WorldState;
 import mindustry.logic.LAssembler;
 import mindustry.logic.LExecutor;
 import mindustry.logic.LVar;
@@ -17,6 +17,16 @@ public final class WorldStateStatements{
             return Double.parseDouble(text.trim());
         }catch(NumberFormatException e){
             return text;
+        }
+    }
+
+    /** 解析为数字，失败返回 0 */
+    public static double parseNum(String text){
+        if(text == null) return 0d;
+        try{
+            return Double.parseDouble(text.trim());
+        }catch(NumberFormatException e){
+            return 0d;
         }
     }
 

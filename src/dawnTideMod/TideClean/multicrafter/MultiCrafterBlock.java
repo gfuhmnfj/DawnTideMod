@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.multicrafter;
+package dawnTideMod.TideClean.multicrafter;
 
 import arc.Core;
 import arc.func.Func;
@@ -16,9 +16,9 @@ import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import dawnTideMod.TideClean.ui.multicrafter.type.JsonRecipe;
-import dawnTideMod.TideClean.ui.multicrafter.type.Recipe;
-import dawnTideMod.TideClean.ui.multicrafter.world.AttributeMultiCrafterBlock;
+import dawnTideMod.TideClean.multicrafter.type.JsonRecipe;
+import dawnTideMod.TideClean.multicrafter.type.Recipe;
+import dawnTideMod.TideClean.multicrafter.world.AttributeMultiCrafterBlock;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.core.UI;

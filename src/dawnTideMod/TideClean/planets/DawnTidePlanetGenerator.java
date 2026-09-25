@@ -1,4 +1,4 @@
-package dawnTideMod.TideClean.ui.planets;
+package dawnTideMod.TideClean.planets;
 
 import arc.graphics.Color;
 import arc.math.Mathf;
