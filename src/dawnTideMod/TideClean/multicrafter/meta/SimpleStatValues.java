@@ -81,6 +81,15 @@ public class SimpleStatValues {
         };
     }
 
+    public static StatValue cold(float amount) {
+        return table ->  {
+            Stack stack = simpleStack(Icon.waves, amount / 60f, new Color(0.35f, 0.75f, 1f, 0.85f));
+            stack.addListener(Tooltip.Tooltips.getInstance().create("冷量", mobile));
+
+            table.add(stack).padRight(4f);
+        };
+    }
+
     public static StatValue payloads(Seq<PayloadStack> stacks) { return payloads(true, stacks); }
     public static StatValue payloads(boolean displayName, Seq<PayloadStack> stacks) { return payloads(displayName, true, stacks); }
     public static StatValue payloads(boolean displayName, boolean tooltip, Seq<PayloadStack> stacks) {

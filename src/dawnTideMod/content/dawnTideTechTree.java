@@ -1,8 +1,7 @@
 package dawnTideMod.content;
 
 import arc.struct.Seq;
-import dawnTideMod.content.Blocks.DawnTideDefense;
-import dawnTideMod.content.Blocks.DawnTideUnits;
+import dawnTideMod.content.Blocks.*;
 import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -13,6 +12,7 @@ import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 import mindustry.type.SectorPreset;
 
+import static mindustry.content.SectorPresets.desolateRift;
 import static mindustry.content.SectorPresets.planetaryTerminal;
 
 public class dawnTideTechTree {
@@ -24,39 +24,55 @@ public class dawnTideTechTree {
     public static void load(){
 
         addToNext(Blocks.multiplicativeReconstructor, () -> {
-            node(DawnTideUnits.numberUpgradeUnitGenerator,
-                Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
-
-            });
+            node(DawnTideUnits.numberUpgradeUnitGenerator, Seq.with(
+                new Objectives.SectorComplete(planetaryTerminal),
+                    new Objectives.SectorComplete(desolateRift),
+                    DawnTideConveyor.liquidUnloader,
+                    DawnTideBlocks.coldGenerator
+            ));
         });
 
         addToNext(Blocks.router, () -> {
-            nodeProduce(DawnTideDefense.miniWarehouse, () -> {});
+            nodeProduce(DawnTideDefense.miniWarehouse);
         });
 
         addToNext(Items.titanium, () -> {
             nodeProduce(dawnTideItems.iron, () -> {
-                nodeProduce(dawnTideItems.quartz, () -> {});
+                nodeProduce(dawnTideItems.quartz);
             });
-            nodeProduce(dawnTideItems.ceramicGlass, () -> {});
-            nodeProduce(dawnTideItems.fibrousFat, () -> {});
+            nodeProduce(dawnTideItems.ceramicGlass);
+            nodeProduce(dawnTideItems.fibrousFat);
         });
         addToNext(Items.thorium, () -> {
             nodeProduce(dawnTideItems.steel, () -> {
-                nodeProduce(dawnTideItems.uranium, () -> {});
+                nodeProduce(dawnTideItems.uranium);
             });
         });
         addToNext(dawnTideItems.uranium, () -> {
-            nodeProduce(dawnTideItems.boundaryBreakingAlloy, () -> {});
+            nodeProduce(dawnTideItems.boundaryBreakingAlloy);
         });
         addToNext(Items.blastCompound, () -> {
-            nodeProduce(dawnTideItems.highExplosive, () -> {});
+            nodeProduce(dawnTideItems.highExplosive);
         });
         addToNext(Liquids.water, () -> {
-            nodeProduce(dawnTideLiquids.vulcanizing, () -> {});
+            nodeProduce(dawnTideLiquids.vulcanizing);
         });
+        addToNext(Items.copper, () -> {
+            node(DawnTideBlocks.packingMachine, () -> {
+                node(DawnTideBlocks.coldGenerator);
+            });
+            node(DawnTideBlocks.quartzConduit);
+            node(DawnTideBlocks.quartzBridgeConduit);
+            node(DawnTideBlocks.quartzTank);
+            node(DawnTideBlocks.quartzPump);
+        });
+
+        addToNext(Blocks.airFactory, () -> {
+            node(dawnTideUnitTypes.jianYu);
+        });
+
         addToNext(Planets.erekir, () -> {
-            node(DawnTidePlanet.dawnSector, () -> {});
+            node(DawnTidePlanet.dawnSector);
         });
     }
 
@@ -76,14 +92,8 @@ public class dawnTideTechTree {
         roots.add(root);
         return root;
     }
-
-    public static TechTree.TechNode node(UnlockableContent content, Runnable children){
-        return node(content, content.researchRequirements(), children);
-    }
-
-    public static TechTree.TechNode node(UnlockableContent content, ItemStack[] requirements, Runnable children){
-        return node(content, requirements, null, children);
-    }
+    public static TechTree.TechNode node(UnlockableContent content, Runnable children){return node(content, content.researchRequirements(), children);}
+    public static TechTree.TechNode node(UnlockableContent content, ItemStack[] requirements, Runnable children){return node(content, requirements, null, children);}
 
     public static TechTree.TechNode node(UnlockableContent content, ItemStack[] requirements, Seq<Objectives.Objective> objectives, Runnable children){
         TechTree.TechNode node = new TechTree.TechNode(context, content, requirements);
@@ -103,23 +113,37 @@ public class dawnTideTechTree {
 
         return node;
     }
-
-    public static void node(UnlockableContent content, Seq<Objectives.Objective> objectives, Runnable children){
-        node(content, content.researchRequirements(), objectives, children);
-    }
-
+    public static void node(UnlockableContent content, Seq<Objectives.Objective> objectives, Runnable children){node(content, content.researchRequirements(), objectives, children);}
     public static TechTree.TechNode node(UnlockableContent block){
         return node(block, () -> {});
     }
-
-    public static TechTree.TechNode nodeProduce(UnlockableContent content, Seq<Objectives.Objective> objectives, Runnable children){
-        return node(content, content.researchRequirements(), objectives.add(new Objectives.Produce(content)), children);
+    /** 紧凑写法：node(内容, Seq.with(new Objectives.SectorComplete(...), 某内容, 某单位))
+     *  —— Seq 里的裸 UnlockableContent 自动包装为 Objectives.Research */
+    public static TechTree.TechNode node(UnlockableContent content, Object... objectives){
+        Seq<Objectives.Objective> list = new Seq<>();
+        for(Object o : objectives){
+            collectObjective(list, o);
+        }
+        return node(content, content.researchRequirements(), list, () -> {});
     }
 
-    public static TechTree.TechNode nodeProduce(UnlockableContent content, Runnable children){
-        return nodeProduce(content, new Seq<>(), children);
+    /** nodeProduce 的同款紧凑写法，末尾自动追加 Produce 目标 */
+    public static TechTree.TechNode nodeProduce(UnlockableContent content, Object... objectives){
+        Seq<Objectives.Objective> list = new Seq<>();
+        for(Object o : objectives){
+            collectObjective(list, o);
+        }
+        return nodeProduce(content, list, () -> {});
     }
 
-    public static TechTree.TechNode nodeProduce(UnlockableContent content){return nodeProduce(content,() -> {});
+    private static void collectObjective(Seq<Objectives.Objective> list, Object o){
+        if(o instanceof Objectives.Objective obj){
+            list.add(obj);
+        }else if(o instanceof UnlockableContent uc){
+            list.add(new Objectives.Research(uc));
+        }
     }
+    public static TechTree.TechNode nodeProduce(UnlockableContent content, Seq<Objectives.Objective> objectives, Runnable children){return node(content, content.researchRequirements(), objectives.add(new Objectives.Produce(content)), children);}
+    public static TechTree.TechNode nodeProduce(UnlockableContent content, Runnable children){return nodeProduce(content, new Seq<>(), children);}
+    public static TechTree.TechNode nodeProduce(UnlockableContent content){return nodeProduce(content,() -> {});}
 }

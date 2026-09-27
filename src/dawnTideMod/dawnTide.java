@@ -25,9 +25,11 @@ import dawnTideMod.TideClean.ui.UnitEditorDialog;
 import dawnTideMod.TideClean.ui.UnitEditorDialog.DawnControlPanel;
 import dawnTideMod.TideClean.world.WorldState;
 import mindustry.Vars;
+import mindustry.gen.Icon;
 import mindustry.game.EventType.ClientLoadEvent;
 import mindustry.mod.ClassMap;
 import mindustry.mod.Mod;
+import mindustry.ui.Styles;
 
 public class DawnTide extends Mod{
 
@@ -91,14 +93,26 @@ public class DawnTide extends Mod{
 
     private static void registerWorld(){
         DawnTidePlanet.load();
+        dawnTideStatuses.load();
         dawnTideUnitTypes.load();
         dawnTideTechTree.load();
         WorldState.init();
         WorldLogicRegistry.register();
-        dawnTideStatuses.load();
         dawnBullets.load();
         DawnTurrets.load();
         EnemyPathEstimate.register();
-        Events.on(ClientLoadEvent.class, e -> DawnControlPanel.install());
+        Events.on(ClientLoadEvent.class, e -> {
+            DawnControlPanel.install();
+            installSettingsCategory();
+        });
+    }
+
+    private static void installSettingsCategory(){
+        if(Vars.headless || Vars.ui == null || Vars.ui.settings == null) return;
+        Vars.ui.settings.addCategory("DTMod辅助", Icon.settings, table -> {
+            table.button("变速调节", Icon.hammer, Styles.flatt, () -> DawnControlPanel.showSpeedDialog()).growX().margin(4f).row();
+            table.button("单位调试器", Icon.pencil, Styles.flatt, () -> new UnitEditorDialog().show()).growX().margin(4f).row();
+            table.add("[lightgray]曙光潮涌辅助工具：调节游戏速度、生成测试单位[]").left().padTop(8f);
+        });
     }
 }

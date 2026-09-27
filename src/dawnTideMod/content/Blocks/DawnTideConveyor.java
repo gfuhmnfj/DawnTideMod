@@ -66,9 +66,7 @@ public class DawnTideConveyor {
 
         liquidUnloader = new LiquidUnloader("LiquidUnloader"){{
             localizedName = "液体装卸器";
-            description = "从相邻建筑取出液体并注入另一个相邻建筑，点击可指定液体，不指定则自动轮询。";
-            requirements(Category.liquid, with(
-                    dawnTideItems.steel, 40, Items.metaglass, 30, Items.silicon, 25));
+            requirements(Category.liquid, with(dawnTideItems.steel, 40, Items.metaglass, 30, Items.silicon, 25));
             alwaysUnlocked = true;
         }};
     }

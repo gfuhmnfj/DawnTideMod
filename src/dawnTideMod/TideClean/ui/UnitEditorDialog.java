@@ -9,11 +9,14 @@ import arc.scene.ui.Button;
 import arc.scene.ui.ButtonGroup;
 import arc.scene.ui.Image;
 import arc.scene.ui.Label;
+import arc.scene.ui.Slider;
 import arc.scene.ui.TextButton;
 import arc.scene.ui.TextField;
 import arc.scene.ui.layout.Table;
+import arc.struct.Seq;
 import arc.util.Align;
 import arc.util.Log;
+import arc.util.Strings;
 import arc.util.Time;
 import dawnTideMod.TideClean.logic.EnemyPathEstimate;
 import mindustry.Vars;
@@ -214,13 +217,14 @@ public class UnitEditorDialog extends BaseDialog{
 
     public static class DawnControlPanel{
 
-        public static final float[] speedSteps = {0.5f, 1f, 2f, 4f};
-        public static final String[] speedLabels = {"0.5x", "1x", "2x", "4x"};
+        /** 速度档位（可用 [-]/[+] 按钮动态增删） */
+        public static final Seq<Float> speedSteps = Seq.with(0.5f, 1f, 2f, 4f);
 
         public static float speed = 1f;
 
         private static boolean installed = false;
         private static Table panel;
+        private static Table box;
 
         public static void install(){
             if(installed || Vars.headless) return;
@@ -236,24 +240,54 @@ public class UnitEditorDialog extends BaseDialog{
             panel.marginLeft(10f);
             panel.visibility = () -> !Vars.state.isMenu();
 
-            Table box = new Table(Styles.black6);
+            box = new Table(Styles.black6);
             box.margin(6f);
+            rebuildBox();
 
+            panel.add(box);
+            Vars.ui.hudGroup.addChild(panel);
+        }
+
+        private static void rebuildBox(){
+            box.clear();
             box.add("[accent]速度[]").padRight(6f);
 
             ButtonGroup<TextButton> group = new ButtonGroup<>();
             group.setMinCheckCount(1);
             group.setMaxCheckCount(1);
 
-            for(int i = 0; i < speedSteps.length; i++){
-                float step = speedSteps[i];
-                TextButton button = new TextButton(speedLabels[i], Styles.flatTogglet);
+            for(int i = 0; i < speedSteps.size; i++){
+                float step = speedSteps.get(i);
+                TextButton button = new TextButton(labelOf(step), Styles.flatTogglet);
                 button.clicked(() -> setSpeed(step));
                 group.add(button);
                 box.add(button).size(52f, 34f).padRight(2f);
             }
 
-            group.setChecked(speedLabels[indexOf(speed)]);
+            group.setChecked(labelOf(nearestStep(speed)));
+
+            // [+] 新增速度档（当前最大档 ×2）
+            box.button("[+]", Styles.flatt, () -> {
+                float next = Mathf.clamp(speedSteps.peek() * 2f, 0.25f, 16f);
+                if(next <= speedSteps.peek() + 0.001f){
+                    Vars.ui.showInfoToast("已达最大速度档", 1f);
+                    return;
+                }
+                speedSteps.add(next);
+                setSpeed(next);
+                rebuildBox();
+            }).size(34f, 34f).padLeft(4f);
+
+            // [-] 删除最后一个速度档
+            box.button("[-]", Styles.flatt, () -> {
+                if(speedSteps.size <= 1){
+                    Vars.ui.showInfoToast("至少保留一个速度档", 1f);
+                    return;
+                }
+                float removed = speedSteps.pop();
+                if(Mathf.equal(speed, removed)) setSpeed(speedSteps.peek());
+                rebuildBox();
+            }).size(34f, 34f);
 
             TextButton pathButton = new TextButton("[accent]敌人路径[]", Styles.flatTogglet);
             pathButton.clicked(() -> {
@@ -263,15 +297,56 @@ public class UnitEditorDialog extends BaseDialog{
             box.add(pathButton).size(96f, 34f).padLeft(10f);
 
             box.button("[accent]快速存档[]", Styles.flatt, DawnControlPanel::quickSave).size(96f, 34f).padLeft(6f);
+        }
 
-            panel.add(box);
-            Vars.ui.hudGroup.addChild(panel);
+        private static String labelOf(float step){
+            return Strings.autoFixed(step, 2) + "x";
+        }
+
+        private static float nearestStep(float value){
+            float best = speedSteps.first();
+            for(float s : speedSteps){
+                if(Math.abs(s - value) < Math.abs(best - value)) best = s;
+            }
+            return best;
         }
 
         public static void setSpeed(float value){
-            speed = Mathf.clamp(value, 0.25f, 8f);
+            setSpeed(value, true);
+        }
+
+        public static void setSpeed(float value, boolean toast){
+            speed = Mathf.clamp(value, 0.25f, 16f);
             applyDeltaProvider();
-            Vars.ui.showInfoToast("游戏速度：" + speed + "x", 1.2f);
+            if(toast) Vars.ui.showInfoToast("游戏速度：" + speed + "x", 1.2f);
+        }
+
+        /** 设置菜单「变速调节」滑条对话框 */
+        public static void showSpeedDialog(){
+            BaseDialog dialog = new BaseDialog("变速调节");
+            dialog.cont.margin(16f);
+
+            Label valueLabel = new Label(Strings.autoFixed(speed, 2) + "x");
+            valueLabel.setFontScale(1.2f);
+
+            Slider slider = new Slider(0.25f, 16f, 0.25f, false);
+            slider.setValue(speed);
+            slider.changed(() -> {
+                setSpeed(slider.getValue(), false);
+                valueLabel.setText(Strings.autoFixed(speed, 2) + "x");
+            });
+
+            dialog.cont.add("游戏速度").padRight(10f);
+            dialog.cont.add(slider).width(320f);
+            dialog.cont.add(valueLabel).padLeft(10f).row();
+            dialog.cont.button("恢复 1x", () -> {
+                setSpeed(1f, false);
+                slider.setValue(1f);
+                valueLabel.setText("1x");
+            }).padTop(12f);
+
+            dialog.addCloseButton();
+            dialog.show();
         }
 
         private static void applyDeltaProvider(){
@@ -300,13 +375,6 @@ public class UnitEditorDialog extends BaseDialog{
                 Log.err(error);
                 Vars.ui.showInfoToast("存档失败：" + error.getMessage(), 3f);
             }
-        }
-
-        private static int indexOf(float value){
-            for(int i = 0; i < speedSteps.length; i++){
-                if(Mathf.equal(speedSteps[i], value)) return i;
-            }
-            return 1;
         }
     }
 }

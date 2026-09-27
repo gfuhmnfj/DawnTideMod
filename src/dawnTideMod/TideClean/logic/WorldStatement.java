@@ -6,14 +6,14 @@ import arc.scene.ui.layout.Table;
 import mindustry.logic.LCategory;
 import mindustry.logic.LExecutor;
 import mindustry.logic.LStatement;
-import mindustry.logic.LCanvas;
 
 import java.lang.reflect.Field;
 
 public abstract class WorldStatement extends LStatement{
 
     protected static float fieldWidth(){
-        return LCanvas.useRows() ? 100f : 190f;
+        // 159.7 的 LCanvas.useRows() 在 v160.5 中已被移除，此处内联其实现（Scl 已移至 arc.scene.ui.layout）
+        return arc.Core.graphics.getWidth() < arc.scene.ui.layout.Scl.scl(900f) * 1.2f ? 100f : 190f;
     }
 
     protected Cell<?> input(Table table, String value, Cons<String> setter){

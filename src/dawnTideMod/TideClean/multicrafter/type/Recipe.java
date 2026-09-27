@@ -4,6 +4,7 @@ import arc.Core;
 import arc.math.Interp;
 import arc.scene.ui.layout.Cell;
 import arc.scene.ui.layout.Table;
+import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Time;
 import dawnTideMod.TideClean.multicrafter.MultiCrafterBlock;
@@ -17,7 +18,10 @@ import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.graphics.Pal;
 import mindustry.io.SaveVersion;
+import mindustry.type.Item;
 import mindustry.type.ItemStack;
+import mindustry.type.Liquid;
+import mindustry.type.LiquidStack;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.draw.DrawBlock;
@@ -295,6 +299,100 @@ public class Recipe extends UnlockableContent {
         return this;
     }
 
+    // ===== 紧凑写法（可混排，按顺序解析） =====
+    // consumes(物品, 数量, 液体, 数量f, power(耗电), heat(需热))
+    // produces(...) 同款解析，作用于输出端；两者可搭配旧 IOEntry 构造器追加使用
+
+    public Recipe consumes(Object... inputs) {
+        return parseIO(input, inputs);
+    }
+
+    public Recipe produces(Object... outputs) {
+        return parseIO(output, outputs);
+    }
+
+    public Recipe outputItems(ItemStack... stacks) {
+        output.items = Seq.with(output.items).addAll(stacks).toArray(ItemStack.class);
+        return this;
+    }
+
+    public Recipe outputLiquids(LiquidStack... stacks) {
+        output.liquids = Seq.with(output.liquids).addAll(stacks).toArray(LiquidStack.class);
+        return this;
+    }
+
+    public Recipe outputPower(float amount) {
+        output.power = amount;
+        return this;
+    }
+
+    public Recipe outputHeat(float amount) {
+        output.heat = amount;
+        return this;
+    }
+
+    /** consumes/produces 中的电力标记，如 power(1f) */
+    public static PowerAmount power(float amount) {
+        return new PowerAmount(amount);
+    }
+
+    /** consumes/produces 中的热量标记，如 heat(1f) */
+    public static HeatAmount heat(float amount) {
+        return new HeatAmount(amount);
+    }
+
+    /** consumes/produces 中的冷量标记，如 cold(1f) */
+    public static ColdAmount cold(float amount) {
+        return new ColdAmount(amount);
+    }
+
+    private Recipe parseIO(IOEntry entry, Object... objects) {
+        Seq<ItemStack> items = Seq.with(entry.items);
+        Seq<LiquidStack> liquids = Seq.with(entry.liquids);
+
+        for (int i = 0; i < objects.length; i++) {
+            Object obj = objects[i];
+            if (obj instanceof Item item) {
+                if (i + 1 >= objects.length || !(objects[i + 1] instanceof Number num))
+                    throw new IllegalArgumentException("Recipe '" + name + "': item '" + item.name + "' is missing an amount.");
+                items.add(new ItemStack(item, num.intValue()));
+                i++;
+            } else if (obj instanceof Liquid liquid) {
+                if (i + 1 >= objects.length || !(objects[i + 1] instanceof Number num))
+                    throw new IllegalArgumentException("Recipe '" + name + "': liquid '" + liquid.name + "' is missing an amount.");
+                liquids.add(new LiquidStack(liquid, num.floatValue()));
+                i++;
+            } else if (obj instanceof PowerAmount p) {
+                entry.power = p.amount;
+            } else if (obj instanceof HeatAmount h) {
+                entry.heat = h.amount;
+            } else if (obj instanceof ColdAmount c) {
+                entry.cold = c.amount;
+            } else {
+                throw new IllegalArgumentException("Recipe '" + name + "': unrecognized IO argument: " + obj);
+            }
+        }
+
+        entry.items = items.toArray(ItemStack.class);
+        entry.liquids = liquids.toArray(LiquidStack.class);
+        return this;
+    }
+
+    public static class PowerAmount {
+        public final float amount;
+        public PowerAmount(float amount) { this.amount = amount; }
+    }
+
+    public static class HeatAmount {
+        public final float amount;
+        public HeatAmount(float amount) { this.amount = amount; }
+    }
+
+    public static class ColdAmount {
+        public final float amount;
+        public ColdAmount(float amount) { this.amount = amount; }
+    }
+
     public boolean hasItems() {
         return input != null && input.hasItems() || output != null && output.hasItems();
     }
@@ -309,6 +407,10 @@ public class Recipe extends UnlockableContent {
 
     public boolean hasHeat() {
         return input != null && input.hasHeat() || output != null && output.hasHeat();
+    }
+
+    public boolean hasCold() {
+        return input != null && input.hasCold() || output != null && output.hasCold();
     }
 
     public boolean hasPayloads() { return input != null && input.hasPayloads() || output != null && output.hasPayloads(); }

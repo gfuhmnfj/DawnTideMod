@@ -1,17 +1,13 @@
 apply plugin: "java"
-
 sourceSets.main.java.srcDirs = ["src"]
-
 ext{
-    mindustryVersion = "v159.7"
+    mindustryVersion = "v160.5"
     isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
     intermediatesLibs = "build/intermediates/libs"
 }
-
 repositories{
     mavenCentral()
-
     ivy{
         url = 'https://github.com/'
         patternLayout{ artifact(
@@ -20,7 +16,6 @@ repositories{
             '/[organisation]/[module]/releases/download/[revision]/dependencies.jar'))
         }
         metadataSources{ artifact() }
-
         content{
             if(mindustryVersion == "be"){
                 includeVersion("Anuken", "MindustryBuilds", "latest")
@@ -31,30 +26,15 @@ repositories{
     }
 }
 
-java{
-    targetCompatibility = JavaVersion.VERSION_16
-    sourceCompatibility = JavaVersion.VERSION_16
-}
-
-dependencies{
-    compileOnly mindustryVersion == "be" ? "Anuken:MindustryBuilds:latest" : "Anuken:Mindustry:$mindustryVersion"
-}
-
+java{targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_16}
+dependencies{compileOnly mindustryVersion == "be" ? "Anuken:MindustryBuilds:latest" : "Anuken:Mindustry:$mindustryVersion"}
 jar{
     archiveFileName = "${project.name}Desktop.jar"
     destinationDirectory = file(intermediatesLibs)
-
-    from{
-        configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
-    }
-
-    from(projectDir){
-        include "mod.hjson"
-    }
-
-    from("assets/"){
-        include "**"
-    }
+    from{configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }}
+    from(projectDir){include "mod.hjson"}
+    from("assets/"){include "**"}
 }
 
 tasks.register('jarAndroid'){
@@ -63,28 +43,18 @@ tasks.register('jarAndroid'){
 
     doLast{
         if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.")
-
         def d8Dir = new File("$sdkRoot/build-tools/").listFiles().sort().reverse().find{ f -> new File(f, "lib/d8.jar").exists() }
         if(!d8Dir) throw new GradleException("No d8.jar found in $sdkRoot/build-tools")
-
         def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists() }
         if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
-
         def javaBin = new File(System.getProperty("java.home"), "bin/java" + (isWindows ? ".exe" : ""))
-
         def cmd = [javaBin.path, "-cp", new File(d8Dir, "lib/d8.jar").path, "com.android.tools.r8.D8",
                    "--min-api", "21",
                    "--classpath", new File(platformRoot, "android.jar").path,
                    "--output", "${projectName}Android.jar",
                    "${projectName}Desktop.jar"]
-
-        // 必须用绝对路径：Windows 的 CreateProcess 不接受相对路径作为工作目录，
-        // 而 Gradle daemon 的当前目录不一定是项目目录（用 -p 指定项目时就不是），
-        // 那样会报 "CreateProcess error=267, 目录名称无效"。
         def working = new File(projectDir, intermediatesLibs)
-        // jar 任务如果是 UP-TO-DATE 就不会重新创建这个目录（例如刚 clean 过）
         working.mkdirs()
-
         def proc = cmd.execute(null, working)
         proc.waitForProcessOutput(System.out, System.err)
         if(proc.exitValue() != 0) throw new GradleException("d8 failed with exit code ${proc.exitValue()}")
@@ -97,6 +67,5 @@ tasks.register('deploy', Jar){
     dependsOn jar
     archiveFileName = "${projectName}.jar"
     destinationDirectory = file("build/libs")
-
     from{ [zipTree("${intermediatesLibs}/${projectName}Desktop.jar"), zipTree("${intermediatesLibs}/${projectName}Android.jar")] }
 }

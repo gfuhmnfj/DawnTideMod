@@ -2,6 +2,7 @@ package dawnTideMod.TideClean.multicrafter;
 
 import arc.Core;
 import arc.func.Func;
+import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
@@ -19,6 +20,7 @@ import arc.util.io.Writes;
 import dawnTideMod.TideClean.multicrafter.type.JsonRecipe;
 import dawnTideMod.TideClean.multicrafter.type.Recipe;
 import dawnTideMod.TideClean.multicrafter.world.AttributeMultiCrafterBlock;
+import dawnTideMod.TideClean.multicrafter.world.ColdSource;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.core.UI;
@@ -193,6 +195,9 @@ public class MultiCrafterBlock extends Block {
         public float outputHeat;
         public float[] sideHeat = new float[4];
 
+        /** 当前接收到的冷量（来自相邻冷量源） */
+        public float cold;
+
         public @Nullable Payload payload;
         public PayloadSeq payloadInput = new PayloadSeq();
         public PayloadSeq payloadOutput = new PayloadSeq();
@@ -235,6 +240,9 @@ public class MultiCrafterBlock extends Block {
 
             if (currentRecipe.input.hasHeat()) heat = calculateHeat(sideHeat);
             else heat = Mathf.approachDelta(heat, 0f, currentRecipe.warmupRate * delta());
+
+            if (currentRecipe.input.hasCold()) cold = calculateCold();
+            else cold = Mathf.approachDelta(cold, 0f, currentRecipe.warmupRate * delta());
 
             if (currentRecipe.output.hasHeat()) outputHeat = Mathf.approachDelta(outputHeat, currentRecipe.output.heat * efficiency, currentRecipe.warmupRate * delta());
             else outputHeat = Mathf.approachDelta(outputHeat, 0f, currentRecipe.warmupRate * delta());
@@ -345,10 +353,20 @@ public class MultiCrafterBlock extends Block {
         @Override
         public float efficiencyScale() {
             if (currentRecipe == null) return 0f;
-            if (!currentRecipe.input.hasHeat()) return super.efficiencyScale();
 
-            float over = Math.max(heat - currentRecipe.input.heat, 0f);
-            return Math.min(Mathf.clamp(heat / currentRecipe.input.heat) + over / currentRecipe.input.heat * currentRecipe.overheatScale, currentRecipe.maxEfficiency);
+            boolean useHeat = currentRecipe.input.hasHeat();
+            boolean useCold = currentRecipe.input.hasCold();
+            if (!useHeat && !useCold) return super.efficiencyScale();
+
+            float scale = 1f;
+            if (useHeat) {
+                float over = Math.max(heat - currentRecipe.input.heat, 0f);
+                scale *= Math.min(Mathf.clamp(heat / currentRecipe.input.heat) + over / currentRecipe.input.heat * currentRecipe.overheatScale, currentRecipe.maxEfficiency);
+            }
+            if (useCold) {
+                scale *= Mathf.clamp(cold / currentRecipe.input.cold);
+            }
+            return scale;
         }
 
         @Override
@@ -362,6 +380,10 @@ public class MultiCrafterBlock extends Block {
             }
 
             if (currentRecipe.input.hasHeat() && currentRecipe.input.heat > 0f && heat <= 0f) {
+                return false;
+            }
+
+            if (currentRecipe.input.hasCold() && currentRecipe.input.cold > 0f && cold <= 0f) {
                 return false;
             }
 
@@ -413,6 +435,7 @@ public class MultiCrafterBlock extends Block {
 
                 if (recipe.input.hasPower() && power.status < 0.99f) continue;
                 if (recipe.input.hasHeat() && heat < recipe.input.heat) continue;
+                if (recipe.input.hasCold() && cold < recipe.input.cold) continue;
 
                 if (recipe.weight > bestWeight) {
                     bestRecipe = recipe;
@@ -426,6 +449,22 @@ public class MultiCrafterBlock extends Block {
         @Override
         public float calculateHeat(float[] sideHeat) {
             return super.calculateHeat(sideHeat);
+        }
+
+        /** 汇总相邻冷量源的输出（朝向规则与原版热量采集一致） */
+        public float calculateCold() {
+            float cold = 0f;
+
+            for (var build : proximity) {
+                if (build != null && build.team == team && build instanceof ColdSource source) {
+                    if (!build.block.rotate || (relativeTo(build) + 2) % 4 == build.rotation) {
+                        float diff = (Math.min(Math.abs(build.x - x), Math.abs(build.y - y)) / Vars.tilesize);
+                        int contactPoints = Math.min((int) (block.size / 2f + build.block.size / 2f - diff), Math.min(build.block.size, block.size));
+                        cold += source.coldOutput() / build.block.size * contactPoints;
+                    }
+                }
+            }
+            return cold;
         }
 
         @Override
@@ -584,9 +623,11 @@ public class MultiCrafterBlock extends Block {
 
         public float warmupTarget() {
             if (currentRecipe == null) return 0f;
-            if (!currentRecipe.input.hasHeat()) return 1f;
 
-            return Mathf.clamp(heat / currentRecipe.input.heat);
+            float target = 1f;
+            if (currentRecipe.input.hasHeat()) target = Mathf.clamp(heat / currentRecipe.input.heat);
+            if (currentRecipe.input.hasCold()) target = Math.min(target, Mathf.clamp(cold / currentRecipe.input.cold));
+            return target;
         }
 
         @Override
@@ -881,6 +922,17 @@ public class MultiCrafterBlock extends Block {
                 Core.bundle.format("bar.heatpercent", (int) (b.heat + 0.01f), (int) (b.efficiencyScale() * 100 + 0.01f)),
                 Pal.lightOrange,
                 b::heatFrac
+            );
+        });
+        addBar("cold", (MultiCrafterBuild b) -> {
+            if (b.currentRecipe == null || !b.currentRecipe.input.hasCold()) {
+                return null;
+            }
+
+            return new Bar(
+                "冷量 " + (int) (b.cold + 0.01f) + " / " + (int) b.currentRecipe.input.cold,
+                Color.valueOf("5ec8f8"),
+                () -> Mathf.clamp(b.cold / Math.max(b.currentRecipe.input.cold, 0.01f))
             );
         });
         addBar("heat-output", (MultiCrafterBuild b) -> {

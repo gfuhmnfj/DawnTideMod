@@ -12,6 +12,7 @@ public class IOEntry {
     public LiquidStack[] liquids = {};
     public float power = 0;
     public float heat = 0;
+    public float cold = 0;
     public Seq<PayloadStack> payloads = new Seq<>();
 
     public IOEntry() {}
@@ -36,6 +37,11 @@ public class IOEntry {
         return this;
     }
 
+    public IOEntry withCold(float cold) {
+        this.cold = cold;
+        return this;
+    }
+
     public IOEntry withPayloads(PayloadStack... payloads) {
         this.payloads = new Seq<>(payloads);
         return this;
@@ -57,6 +63,7 @@ public class IOEntry {
         Table smallIndictor = new Table();
         if (power > 0) SimpleStatValues.power(power).display(smallIndictor);
         if (heat > 0) SimpleStatValues.heat(heat).display(smallIndictor);
+        if (cold > 0) SimpleStatValues.cold(cold).display(smallIndictor);
 
         table.add(materialTable);
         table.row();
@@ -121,7 +128,7 @@ public class IOEntry {
     }
 
     public boolean isEmpty() {
-        return items.length == 0 && liquids.length == 0 && power <= 0 && heat <= 0 && payloads.size == 0;
+        return items.length == 0 && liquids.length == 0 && power <= 0 && heat <= 0 && cold <= 0 && payloads.size == 0;
     }
 
     public boolean hasItems() {
@@ -148,6 +155,10 @@ public class IOEntry {
 
     public boolean hasHeat() {
         return heat > 0;
+    }
+
+    public boolean hasCold() {
+        return cold > 0;
     }
 
     public boolean hasPayloads() {
