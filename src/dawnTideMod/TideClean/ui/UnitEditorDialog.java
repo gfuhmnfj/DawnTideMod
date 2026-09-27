@@ -2,6 +2,9 @@ package dawnTideMod.TideClean.ui;
 
 import arc.Core;
 import arc.graphics.Color;
+import arc.scene.event.ClickListener;
+import arc.scene.event.InputEvent;
+import arc.scene.event.Touchable;
 import arc.math.Mathf;
 import arc.scene.style.Drawable;
 import arc.scene.style.TextureRegionDrawable;
@@ -21,6 +24,7 @@ import arc.util.Time;
 import dawnTideMod.TideClean.logic.EnemyPathEstimate;
 import mindustry.Vars;
 import mindustry.game.Saves;
+import mindustry.gen.Icon;
 import mindustry.game.Team;
 import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
@@ -215,6 +219,24 @@ public class UnitEditorDialog extends BaseDialog{
         }
     }
 
+    /** HUD 左上角入口（原 DawnTide.buildHudEntry，按归属规则搬入本文件） */
+    public static void installHudEntry(){
+        if(Vars.headless || Core.scene == null || Vars.ui == null || Vars.ui.hudGroup == null) return;
+        Table root = new Table();
+        root.setFillParent(true);
+        root.top().left();
+        root.touchable = Touchable.childrenOnly;
+        root.visibility = () -> !Vars.state.isMenu();
+        Label entry = root.add("[accent]曙光潮涌[]").padTop(80f).padLeft(12f).get();
+        entry.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                new UnitEditorDialog().show();
+            }
+        });
+        Vars.ui.hudGroup.addChild(root);
+    }
+
     public static class DawnControlPanel{
 
         /** 速度档位（可用 [-]/[+] 按钮动态增删） */
@@ -246,6 +268,20 @@ public class UnitEditorDialog extends BaseDialog{
 
             panel.add(box);
             Vars.ui.hudGroup.addChild(panel);
+        }
+
+        /** 设置菜单「DTMod辅助」分类（原 DawnTide.installSettingsCategory，按归属规则搬入本文件） */
+        private static boolean settingsInstalled = false;
+
+        public static void installSettings(){
+            if(settingsInstalled || Vars.headless) return;
+            if(Vars.ui == null || Vars.ui.settings == null) return;
+            settingsInstalled = true;
+            Vars.ui.settings.addCategory("DTMod辅助", Icon.settings, table -> {
+                table.button("变速调节", Icon.hammer, Styles.flatt, () -> DawnControlPanel.showSpeedDialog()).growX().margin(4f).row();
+                table.button("单位调试器", Icon.pencil, Styles.flatt, () -> new UnitEditorDialog().show()).growX().margin(4f).row();
+                table.add("[lightgray]曙光潮涌辅助工具：调节游戏速度、生成测试单位[]").left().padTop(8f);
+            });
         }
 
         private static void rebuildBox(){
