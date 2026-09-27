@@ -17,7 +17,7 @@ import static mindustry.type.ItemStack.with;
 public class DawnTideBlocks{
 
     public static Block
-    packingMachine;
+    packingMachine,UnpackingStation;
 
     public static void load(){
 
