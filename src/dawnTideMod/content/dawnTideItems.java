@@ -2,13 +2,62 @@ package dawnTideMod.content;
 
 import arc.graphics.Color;
 import mindustry.type.Item;
-public class DawnTideItems{
+public class dawnTideItems{
 
     public static Item quartz, iron, uranium, steel, ceramicGlass, boundaryBreakingAlloy, barite,
             highExplosive, oreCrystallization, fibrousFat, fluxAlloy, blueCrystal,
-            titaniumSilver, refinedTitaniumSilver;
+            titaniumSilver, refinedTitaniumSilver,waterBottle,slagBottle,cryofluidBottle,
+            oilBottle,microscaleFluidBottle,vulcanizingBottle;
 
     public static void load(){
+
+        oilBottle = new Item("oilBottle", Color.valueOf("F4F4F4FF")){{
+            localizedName = "石油瓶";
+            hardness = 4;
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 1.5f;
+        }};
+        microscaleFluidBottle = new Item("microscaleFluidBottle", Color.valueOf("F4F4F4FF")){{
+            localizedName = "微米流体瓶";
+            hardness = 4;
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 1.5f;
+        }};
+
+        vulcanizingBottle = new Item("vulcanizingBottle", Color.valueOf("F4F4F4FF")){{
+            localizedName = "硫化液瓶";
+            hardness = 4;
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 1.5f;
+        }};
+
+        slagBottle = new Item("slagBottle", Color.valueOf("F4F4F4FF")){{
+            localizedName = "矿渣瓶";
+            hardness = 4;
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 1.5f;
+        }};
+
+        cryofluidBottle = new Item("cryofluidBottle", Color.valueOf("F4F4F4FF")){{
+            localizedName = "冷却液瓶";
+            hardness = 4;
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 1.5f;
+        }};
+
+        waterBottle = new Item("waterBottle", Color.valueOf("F4F4F4FF")){{
+            localizedName = "水瓶";
+            hardness = 4;
+            cost = 0.5f;
+            alwaysUnlocked = false;
+            healthScaling = 1.5f;
+        }};
+
         quartz = new Item("Quartz", Color.valueOf("F4F4F4FF")){{
             localizedName = "石英";
             hardness = 4;
@@ -112,5 +161,7 @@ public class DawnTideItems{
             alwaysUnlocked = false;
             healthScaling = 2f;
         }};
+
+
     }
 }

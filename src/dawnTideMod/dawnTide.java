@@ -7,16 +7,15 @@ import arc.scene.event.Touchable;
 import arc.scene.ui.Label;
 import arc.scene.ui.layout.Table;
 import arc.util.Log;
-import dawnTideMod.content.DawnBullets;
-import dawnTideMod.content.DawnTideBlocks;
-import dawnTideMod.content.DawnTideItems;
-import dawnTideMod.content.DawnTideLiquids;
+import dawnTideMod.content.Blocks.*;
+import dawnTideMod.content.dawnBullets;
+import dawnTideMod.content.dawnTideItems;
+import dawnTideMod.content.dawnTideLiquids;
 import dawnTideMod.content.DawnTidePlanet;
-import dawnTideMod.content.DawnTideStatuses;
-import dawnTideMod.content.DawnTideTechTree;
-import dawnTideMod.content.DawnTideUnitTypes;
-import dawnTideMod.content.DawnTurrets;
-import dawnTideMod.content.DawnTweaks;
+import dawnTideMod.content.dawnTideStatuses;
+import dawnTideMod.content.dawnTideTechTree;
+import dawnTideMod.content.dawnTideUnitTypes;
+import dawnTideMod.content.dawnTweaks;
 import dawnTideMod.TideClean.logic.EnemyPathEstimate;
 import dawnTideMod.TideClean.logic.WorldLogicRegistry;
 import dawnTideMod.TideClean.multicrafter.MultiCrafterBlock;
@@ -41,8 +40,16 @@ public class DawnTide extends Mod{
     public void loadContent(){
         registerContent();
         super.loadContent();
+        dawnTweaks.load();
+        DawnTideCrafter.load();
+        DawnTideDefense.load();
+        DawnTideDrill.load();
+        DawnTideOre.load();
+        DawnTideUnits.load();
+        DawnTidePower.load();
+        DawnTideWall.load();
+        DawnTideConveyor.load();
         registerWorld();
-        DawnTweaks.load();
         Log.info("");
     }
 
@@ -77,19 +84,19 @@ public class DawnTide extends Mod{
     }
 
     private static void registerContent(){
-        DawnTideItems.load();
-        DawnTideLiquids.load();
+        dawnTideItems.load();
+        dawnTideLiquids.load();
         DawnTideBlocks.load();
     }
 
     private static void registerWorld(){
         DawnTidePlanet.load();
-        DawnTideUnitTypes.load();
-        DawnTideTechTree.load();
+        dawnTideUnitTypes.load();
+        dawnTideTechTree.load();
         WorldState.init();
         WorldLogicRegistry.register();
-        DawnTideStatuses.load();
-        DawnBullets.load();
+        dawnTideStatuses.load();
+        dawnBullets.load();
         DawnTurrets.load();
         EnemyPathEstimate.register();
         Events.on(ClientLoadEvent.class, e -> DawnControlPanel.install());

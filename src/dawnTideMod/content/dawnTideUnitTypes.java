@@ -12,7 +12,7 @@ import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Sounds;
 import mindustry.type.Weapon;
 
-public class DawnTideUnitTypes{
+public class dawnTideUnitTypes {
     public static int BODY_COUNT = 6;
     public static float SEGMENT_SPACING = 26f;
     public static SegmentUnitType dawnWormHead;
@@ -245,5 +245,5 @@ public class DawnTideUnitTypes{
         }
     }
     public static int totalSegments(){return BODY_COUNT + 1;}
-    private DawnTideUnitTypes(){}
+    private dawnTideUnitTypes(){}
 }

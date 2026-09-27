@@ -1,4 +1,4 @@
-package dawnTideMod.content;
+package dawnTideMod.content.Blocks;
 
 import arc.Core;
 import arc.graphics.Color;
@@ -8,11 +8,15 @@ import arc.struct.Seq;
 import arc.util.Scaling;
 import arc.util.Strings;
 import dawnTideMod.TideClean.Bullet.DawnCritBulletType;
+import dawnTideMod.content.dawnBullets;
+import dawnTideMod.content.dawnTideItems;
 import mindustry.content.Bullets;
 import mindustry.content.Items;
 import mindustry.content.StatusEffects;
 import mindustry.entities.UnitSorts;
+import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
+import mindustry.entities.bullet.LightningBulletType;
 import mindustry.entities.bullet.PointLaserBulletType;
 import mindustry.entities.part.RegionPart;
 import mindustry.gen.Sounds;
@@ -23,6 +27,7 @@ import mindustry.type.ItemStack;
 import mindustry.ui.Styles;
 import mindustry.world.blocks.defense.turrets.ContinuousTurret;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
+import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.draw.DrawTurret;
 import mindustry.world.meta.Env;
 import mindustry.world.meta.Stat;
@@ -31,6 +36,8 @@ import mindustry.world.meta.StatValue;
 public class DawnTurrets{
     public static ItemTurret tideCannon;
     public static ContinuousTurret prism;
+    public static PowerTurret flicker;
+    public static ItemTurret haze;
     public static void load(){
         tideCannon = new ItemTurret("tide-cannon"){
             {
@@ -43,8 +50,8 @@ public class DawnTurrets{
                 inaccuracy = 3f;
                 rotateSpeed = 6f;
                 ammo(
-                        Items.copper, DawnBullets.tideCrit,
-                        Items.graphite, DawnBullets.tideCritHeavy
+                        Items.copper, dawnBullets.tideCrit,
+                        Items.graphite, dawnBullets.tideCritHeavy
                 );
                 limitRange(2f);
             }
@@ -59,10 +66,10 @@ public class DawnTurrets{
             localizedName = "棱镜";
             description = "向敌人发射慢速单目标激光。";
             requirements(Category.turret, ItemStack.with(
-                DawnTideItems.steel, 550,
+                dawnTideItems.steel, 550,
                 Items.silicon, 400,
-                DawnTideItems.ceramicGlass, 800,
-                DawnTideItems.boundaryBreakingAlloy, 400
+                dawnTideItems.ceramicGlass, 800,
+                dawnTideItems.boundaryBreakingAlloy, 400
             ));
             squareSprite = false;
             size = 4;
@@ -124,6 +131,158 @@ public class DawnTurrets{
                     moveY = -8f;
                 }});
             }};
+        }};
+
+        flicker = new PowerTurret("Flicker"){{
+            localizedName = "闪烁";
+            description = "向敌人发射一颗电球，碰撞爆炸后散射大量电弧";
+            requirements(Category.turret, ItemStack.with(
+                dawnTideItems.steel, 70, Items.titanium, 140, Items.silicon, 80));
+            health = 1200;
+            size = 3;
+            buildTime = 134f;
+            range = 160f;
+            reload = 46.2f;
+            inaccuracy = 3f;
+            rotateSpeed = 6f;
+            targetAir = false;
+            targetGround = true;
+            liquidCapacity = 20f;
+            shootSound = Sounds.shootArc;
+            // 冷却强化：12液体/秒，水160% / 冷冻液235%（coolantMultiplier=7.5 反推自规格值）
+            coolantMultiplier = 7.5f;
+            coolant = consumeCoolant(0.2f);
+            shootType = new BasicBulletType(3f, 10f){{
+                // 电球：3格大小，10伤害，3格爆炸范围，迟缓1秒
+                width = 18f;
+                height = 18f;
+                shrinkX = 0f;
+                shrinkY = 0f;
+                hitSize = 10f;
+                lifetime = 56f;
+                splashDamage = 10f;
+                splashDamageRadius = 24f;
+                status = StatusEffects.slow;
+                statusDuration = 60f;
+                backColor = Color.valueOf("7d8dff");
+                frontColor = Color.valueOf("c4d7ff");
+                hitColor = Color.valueOf("c4d7ff");
+                // 爆炸后散射 8 道电弧：20伤害 30穿透 电击3秒
+                fragBullets = 8;
+                fragRandomSpread = 0f;
+                fragSpread = 45f;
+                fragBullet = new BasicBulletType(4f, 20f){{
+                    width = 7f;
+                    height = 12f;
+                    lifetime = 26f;
+                    pierce = true;
+                    pierceCap = 30;
+                    status = StatusEffects.shocked;
+                    statusDuration = 180f;
+                    backColor = Color.valueOf("a8b6ff");
+                    frontColor = Color.valueOf("e8ecff");
+                }};
+            }};
+            limitRange(2f);
+        }};
+
+        haze = new ItemTurret("Haze"){{
+            localizedName = "阴霾";
+            description = "使用多类型弹药精准打击机械单位，以毁伤目标。";
+            requirements(Category.turret, ItemStack.with(
+                Items.copper,220,Items.graphite,90,Items.titanium,140,
+                Items.silicon, 90, dawnTideItems.ceramicGlass, 45));
+            health = 1420;
+            size = 3;
+            buildTime = 210f;
+            range = 228f;
+            reload = 9.4f;
+            inaccuracy = 5f;
+            rotateSpeed = 8f;
+            targetAir = true;
+            targetGround = true;
+            liquidCapacity = 30f;
+            shootSound = Sounds.shootSalvo;
+            coolantMultiplier = 7.5f;
+            coolant = consumeCoolant(0.2f);
+
+            // 铅：30伤害 0.8击退
+            BulletType hazeLead = new BasicBulletType(4f, 30f){{
+                width = 8f;
+                height = 10f;
+                lifetime = 60f;
+                knockback = 0.8f;
+                backColor = Color.valueOf("6e7080");
+                frontColor = Color.valueOf("dfe3ee");
+            }};
+
+            // 石墨：48伤害 x2装填 射程+3格 1.2x射速 0.2击退 x2穿透
+            BulletType hazeGraphite = new BasicBulletType(4f, 48f){{
+                width = 9f;
+                height = 12f;
+                lifetime = 60f;
+                ammoMultiplier = 2f;
+                reloadMultiplier = 1.2f;
+                rangeChange = 24f;
+                knockback = 0.2f;
+                pierce = true;
+                pierceCap = 2;
+                backColor = Color.valueOf("4a4f5a");
+                frontColor = Color.valueOf("9aa0a6");
+            }};
+
+            // 硅：42伤害 x4装填 追踪720°/s~7格 1.6x射速
+            BulletType hazeSilicon = new BasicBulletType(4f, 42f){{
+                width = 8f;
+                height = 12f;
+                lifetime = 60f;
+                ammoMultiplier = 4f;
+                reloadMultiplier = 1.6f;
+                homingPower = 0.24f;
+                homingRange = 56f;
+                backColor = Color.valueOf("3f6f8f");
+                frontColor = Color.valueOf("8fd3ff");
+            }};
+
+            // 钛：70伤害 x4装填 0.2击退 2x闪电~8伤害~3长度 电击1秒
+            BulletType hazeTitanium = new BasicBulletType(4.5f, 70f){{
+                width = 9f;
+                height = 12f;
+                lifetime = 60f;
+                ammoMultiplier = 4f;
+                knockback = 0.2f;
+                lightning = 2;
+                lightningDamage = 8f;
+                lightningLength = 3;
+                lightningType = new LightningBulletType(){{
+                    status = StatusEffects.shocked;
+                    statusDuration = 60f;
+                }};
+                backColor = Color.valueOf("5a4f8f");
+                frontColor = Color.valueOf("b5a8ff");
+            }};
+
+            // 钍：90伤害 x3装填 0.5击退 x3穿透
+            BulletType hazeThorium = new BasicBulletType(4.5f, 90f){{
+                width = 10f;
+                height = 13f;
+                lifetime = 60f;
+                ammoMultiplier = 3f;
+                knockback = 0.5f;
+                pierce = true;
+                pierceCap = 3;
+                backColor = Color.valueOf("3f7f5f");
+                frontColor = Color.valueOf("9cffb0");
+            }};
+
+            ammo(
+                Items.lead, hazeLead,
+                Items.graphite, hazeGraphite,
+                Items.silicon, hazeSilicon,
+                Items.titanium, hazeTitanium,
+                Items.thorium, hazeThorium
+            );
+            limitRange(5f);
         }};
     }
 

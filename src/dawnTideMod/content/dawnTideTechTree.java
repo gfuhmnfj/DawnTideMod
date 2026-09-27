@@ -1,6 +1,8 @@
 package dawnTideMod.content;
 
 import arc.struct.Seq;
+import dawnTideMod.content.Blocks.DawnTideDefense;
+import dawnTideMod.content.Blocks.DawnTideUnits;
 import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -13,7 +15,7 @@ import mindustry.type.SectorPreset;
 
 import static mindustry.content.SectorPresets.planetaryTerminal;
 
-public class DawnTideTechTree{
+public class dawnTideTechTree {
 
     private static TechTree.TechNode context;
 
@@ -22,36 +24,36 @@ public class DawnTideTechTree{
     public static void load(){
 
         addToNext(Blocks.multiplicativeReconstructor, () -> {
-            node(DawnTideBlocks.numberUpgradeUnitGenerator,
+            node(DawnTideUnits.numberUpgradeUnitGenerator,
                 Seq.with(new Objectives.SectorComplete(planetaryTerminal)), () -> {
 
             });
         });
 
         addToNext(Blocks.router, () -> {
-            nodeProduce(DawnTideBlocks.miniWarehouse, () -> {});
+            nodeProduce(DawnTideDefense.miniWarehouse, () -> {});
         });
 
         addToNext(Items.titanium, () -> {
-            nodeProduce(DawnTideItems.iron, () -> {
-                nodeProduce(DawnTideItems.quartz, () -> {});
+            nodeProduce(dawnTideItems.iron, () -> {
+                nodeProduce(dawnTideItems.quartz, () -> {});
             });
-            nodeProduce(DawnTideItems.ceramicGlass, () -> {});
-            nodeProduce(DawnTideItems.fibrousFat, () -> {});
+            nodeProduce(dawnTideItems.ceramicGlass, () -> {});
+            nodeProduce(dawnTideItems.fibrousFat, () -> {});
         });
         addToNext(Items.thorium, () -> {
-            nodeProduce(DawnTideItems.steel, () -> {
-                nodeProduce(DawnTideItems.uranium, () -> {});
+            nodeProduce(dawnTideItems.steel, () -> {
+                nodeProduce(dawnTideItems.uranium, () -> {});
             });
         });
-        addToNext(DawnTideItems.uranium, () -> {
-            nodeProduce(DawnTideItems.boundaryBreakingAlloy, () -> {});
+        addToNext(dawnTideItems.uranium, () -> {
+            nodeProduce(dawnTideItems.boundaryBreakingAlloy, () -> {});
         });
         addToNext(Items.blastCompound, () -> {
-            nodeProduce(DawnTideItems.highExplosive, () -> {});
+            nodeProduce(dawnTideItems.highExplosive, () -> {});
         });
         addToNext(Liquids.water, () -> {
-            nodeProduce(DawnTideLiquids.vulcanizing, () -> {});
+            nodeProduce(dawnTideLiquids.vulcanizing, () -> {});
         });
         addToNext(Planets.erekir, () -> {
             node(DawnTidePlanet.dawnSector, () -> {});

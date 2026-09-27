@@ -5,7 +5,7 @@ import dawnTideMod.TideClean.Bullet.DawnCritBulletType;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.BulletType;
 
-public class DawnBullets{
+public class dawnBullets {
 
     public static BulletType tideCrit, tideCritHeavy;
 

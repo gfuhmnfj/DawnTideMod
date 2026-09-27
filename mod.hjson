@@ -3,7 +3,7 @@ name: "dawnTide"
 author: "爱摸鱼的奈奈，天苑四"
 main: "dawnTideMod.DawnTide"
 description: "感谢以下这些开发室成员\n画师：天苑四\n\n作者：爱摸鱼的奈奈"
-version: 0.3.7
-minGameVersion: 159.1
+version: 0.3.8
+minGameVersion: 160.5
 java: true
 repo: gfuhmnfj/DawnTideMod

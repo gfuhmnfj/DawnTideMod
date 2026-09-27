@@ -81,7 +81,8 @@ public class DawnTidePlanet{
                         DawnTidePalette.CLOUD_2.a(0.75f), 2, 0.42f, 1.2f, 0.45f)
         ));
 
-        dawnSector = new SectorPreset("dawn-sector", "dawn-sector", dawn, 15) {{
+        dawnSector = new SectorPreset("dawn-sector", "dawn-sector", dawn, 10) {{
+            localizedName = "第一个地区";
             difficulty = 3f;
             captureWave = 30;
             requireUnlock = true;

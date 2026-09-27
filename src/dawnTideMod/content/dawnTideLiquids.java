@@ -2,7 +2,7 @@ package dawnTideMod.content;
 
 import arc.graphics.Color;
 import mindustry.type.Liquid;
-public class DawnTideLiquids{
+public class dawnTideLiquids {
 
     public static Liquid vulcanizing, microscaleFluid;
 
